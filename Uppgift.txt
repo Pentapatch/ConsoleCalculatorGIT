@@ -8,7 +8,7 @@ Analysera och utvärdera gränssnitt, designmönster och lösningar i din kod oc
 Skapa en GIT repository, och använda sig av GIT genom att göra olika versionen av din kod.
 
 // Checklista
-[ ] Input/output
+[X] Input/output
 [ ] Lista med historik
 [ ] Kontrollstrukturer
 [ ] Välja lämpligt designmönster

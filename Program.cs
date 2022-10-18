@@ -9,3 +9,9 @@
 // Fråga användaren om den vill visa tidigare resultat.
 // Visa tidigare resultat
 // Fråga användaren om den vill avsluta eller fortsätta.
+
+using ConsoleCalculatorGIT;
+
+IO.Menu("Välkommen till Dennis Hankvist's semi-avancerade konsollkalkylator.", "Räkna", "Visa tidigare resultat", "Avsluta");
+IO.Write("1 {+} 2 {*} 3 {/} 4 {=} 5");
+IO.Wait("Tryck på valfri knapp för att fortsätta...");
