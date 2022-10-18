@@ -30,6 +30,9 @@ namespace ConsoleCalculatorGIT
         public static readonly bool WrapArroundMenu = true;
 
         // Public methods
+
+        public static void Write() => Write("\n", false);
+
         public static void Write(string text, bool newLine = true) =>
             Write(text, DefaultForegroundColor, DefaultBackgroundColor, DefaultHighlightColor, newLine);
 
@@ -110,7 +113,7 @@ namespace ConsoleCalculatorGIT
             Console.Clear();
         }
 
-        public static int Menu(string text, params string[] menuItems)
+        public static int Menu(string text, int defaultIndex, params string[] menuItems)
         {
             // This method prints a navigatable menu which lets the end user choose
             // between options that is passed in to the method.
@@ -126,8 +129,12 @@ namespace ConsoleCalculatorGIT
             WriteSystemText("Tryck på {upp}- eller {nedpil} för att navigera i menyn.\n" +
                               "Tryck på {enter} för att välja alternativ.\n\n");
 
+            // Check for errors regarding the parameter defaultIndex
+            if (defaultIndex < 0) throw new ArgumentOutOfRangeException("The index must be 0 or greater.");
+            if (defaultIndex >= menuItems.Length) throw new ArgumentOutOfRangeException("The index must be less than or equal to the number of menu options.");
+
             // Write the menu items
-            int index = 0;
+            int index = defaultIndex;
             int[] consoleIndices = new int[menuItems.Length]; // Store the Y-position of the start of the options
 
             for (int i = 0; i < menuItems.Length; i++)
