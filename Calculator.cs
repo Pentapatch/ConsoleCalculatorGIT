@@ -38,10 +38,12 @@
             {
 
                 // Display a menu to let the user choose the next action
-                switch (IO.Menu("Välj vad du vill göra härnäst.",
+                index = IO.Menu("Välj vad du vill göra härnäst.", index,
                                 "Starta ny beräkning",
                                 "Visa beräkningshistorik",
-                                "Avsluta programmet"))
+                                "Avsluta programmet");
+
+                switch (index)
                 {
                     case 0: // Starta ny beräkning
 
