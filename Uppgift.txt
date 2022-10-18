@@ -14,11 +14,17 @@ Skapa en GIT repository, och använda sig av GIT genom att göra olika versionen
 [ ] Välja lämpligt designmönster
 [X] Källkodshantering med GIT
 
-// Skall påvisa kunskaper om
+// Skall påvisa kunskaper om:
 1. Konstruktion av enkla program innehållande kontrollstrukturer
 2. Hantering av enkel input/output
 3. Val av lämpliga designmönster
 4. Användning av samlingsklasser
+
+// Skall ha färdigheter i:
+5. Konstruera enkla program innehållande kontrollstrukturer
+6. Hantera dataflöde som sker genom gränssnitt, input/output
+7. Använda samlingsklasser
+8. Använda källkodshantering med GIT
 
 // PSEUDOKOD
 
