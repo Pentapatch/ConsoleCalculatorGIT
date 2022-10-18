@@ -8,11 +8,11 @@ Analysera och utvärdera gränssnitt, designmönster och lösningar i din kod oc
 Skapa en GIT repository, och använda sig av GIT genom att göra olika versionen av din kod.
 
 // Checklista
-[X] Input/output
+[X] Input/output 					- IO Class that handles all basic interaction
 [ ] Lista med historik
-[ ] Kontrollstrukturer
+[X] Kontrollstrukturer				- If/If else/Else, While, For
 [ ] Välja lämpligt designmönster
-[X] Källkodshantering med GIT
+[X] Källkodshantering med GIT		- Repository med branches
 
 // Skall påvisa kunskaper om:
 1. Konstruktion av enkla program innehållande kontrollstrukturer
