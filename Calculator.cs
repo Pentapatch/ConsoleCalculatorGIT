@@ -3,7 +3,7 @@
     internal static class Calculator
     {
         // Private fields, properties and consts
-        
+
         private static List<string> history = new();
 
         private static bool helpShown = false;
@@ -108,6 +108,12 @@
             IO.Write("Lämna ett tomt svar och tryck på {enter} för att avbryta en beräkning.\n",
                      IO.DefaultForegroundColor, IO.DefaultBackgroundColor, ConsoleColor.Cyan);
 
+            IO.Write("DECIMALTAL", IO.DefaultHighlightColor);
+            IO.Write("Kalkylatorn kan hantera decimaltal genom att använda {,} tecknet.",
+                     IO.DefaultForegroundColor, IO.DefaultBackgroundColor, ConsoleColor.Cyan);
+            IO.Write("Exempel: {2,25 * 12,75} är tillåtet\n",
+                     ConsoleColor.DarkGray, IO.DefaultBackgroundColor, ConsoleColor.Cyan);
+
             IO.Wait("Tryck på valfri knapp för att fortsätta...");
         }
 
@@ -125,7 +131,32 @@
             // Check if we should abort (left an empty answer)
             if (test == "") return;
 
+            //int test2 = ExpressionParser.ParseExpression(new List<string> { "2", "*", "4", "-", "-5", "^", "3" });
 
+            try
+            {
+                List<string> tokens = ExpressionParser.TokenizeInput(test);
+                double result = ExpressionParser.ParseExpression(tokens);
+                IO.Clear();
+                string resultString = "Resultat: " + ExpressionParser.FormatExpression(tokens) + " {=} " + result.ToString();
+                IO.Menu(resultString, 0, "Gör en ny beräkning", "Visa beräkningssteg", "Visa historik", "Gå tillbaka till huvudmenyn");
+            }
+            catch (DivideByZeroException)
+            {
+                IO.Write("Ogiltig inmatning: Det går inte att dividera med noll.", ConsoleColor.Red);
+            }
+            catch (Exception e)
+            {
+                if (e.Message != "")
+                    IO.Write($"Ogiltig inmatning: {e.Message}", ConsoleColor.Red);
+                else
+                    IO.Write("Ogiltig inmatning", ConsoleColor.Red);
+            }
+
+
+            //IO.Write(ExpressionParser.FormatExpression(ExpressionParser.TokenizeInput(test)));
+            //int test2 = ExpressionParser.ParseExpression(ExpressionParser.TokenizeInput(test));
+            //IO.Write(test2.ToString());
             IO.Wait();
         }
 
