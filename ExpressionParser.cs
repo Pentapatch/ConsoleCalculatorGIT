@@ -140,6 +140,7 @@
                     if (currentOperator == "/" && right == 0)
                         throw new DivideByZeroException();
 
+                    // Perform the calculation
                     if (currentOperator == ExponentiationOperator.ToString())
                         sum = Math.Pow(left, right);
                     if (currentOperator == ModulusOperator.ToString())
@@ -154,12 +155,8 @@
                         sum = left - right;
 
                     // Remove the three currently calculated tokens
-                    privateTokens.RemoveAt(index - 1); // Use the same index because the index of the next item will change when removed
-                    privateTokens.RemoveAt(index - 1);
-                    privateTokens.RemoveAt(index - 1);
-                    //privateTokens.RemoveRange(index - 1, 3);
-
                     // Insert a new token that represents the computed sum of the three tokens currently affected
+                    privateTokens.RemoveRange(index - 1, 3);
                     privateTokens.Insert(index - 1, sum.ToString());
                 }
                 else

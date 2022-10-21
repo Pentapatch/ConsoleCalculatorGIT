@@ -4,7 +4,7 @@ namespace ConsoleCalculatorGIT
 {
     internal static class IO
     {
-        // This class handles all input and output between the console and the end user
+        // This class handles all input and output between the console and the end user.
         // It validates the input before returning it to the calling method,
         // and formats the output before writing to the console.
         // It is marked as static because it will not handle instanced data.
@@ -31,18 +31,37 @@ namespace ConsoleCalculatorGIT
 
         // Public methods
 
+        /// <summary>Write a new line to the console.</summary>
         public static void Write() => Write("\n", false);
 
+        /// <summary>Writes the specified text to the console using the default foreground-, background- and highlight colors.</summary>
+        /// <param name="text">The text to write.</param>
+        /// <param name="newLine">Set to true to write the current line terminator at the end of the text.</param>
         public static void Write(string text, bool newLine = true) =>
             Write(text, DefaultForegroundColor, DefaultBackgroundColor, DefaultHighlightColor, newLine);
 
+        /// <summary>Writes the specified text to the console in a specified color, while using the default background- and highlight colors.</summary>
+        /// <param name="text">The text to write.</param>
+        /// <param name="newLine">Set to true to write the current line terminator at the end of the text.</param>
+        /// <param name="foregroundColor">The color of the text.</param> 
         public static void Write(string text, ConsoleColor foregroundColor, bool newLine = true) =>
             Write(text, foregroundColor, DefaultBackgroundColor, DefaultHighlightColor, newLine);
 
+        /// <summary>Writes the specified text to the console in a specified foreground- and background color, while using the default highlight color.</summary>
+        /// <param name="text">The text to write.</param>
+        /// <param name="newLine">Set to true to write the current line terminator at the end of the text.</param>
+        /// <param name="foregroundColor">The color of the text.</param> 
+        /// <param name="backgroundColor">The background color of the text.</param>
         public static void Write(string text, ConsoleColor foregroundColor, ConsoleColor backgroundColor,
-                                 bool newLine = true) =>
+            bool newLine = true) =>
             Write(text, foregroundColor, backgroundColor, DefaultHighlightColor, newLine);
 
+        /// <summary>Writes the specified text to the console in specified foreground-, highlight- and background colors.</summary>
+        /// <param name="text">The text to write.</param>
+        /// <param name="newLine">Set to true to write the current line terminator at the end of the text.</param>
+        /// <param name="foregroundColor">The color of the text.</param> 
+        /// <param name="backgroundColor">The background color of the text.</param>
+        /// <param name="highlightColor">The color of the text that is highlighted (by enclosing it in {curly braces}).</param>
         public static void Write(string text, ConsoleColor foregroundColor, ConsoleColor backgroundColor,
                                  ConsoleColor highlightColor, bool newLine = true)
         {
@@ -50,22 +69,18 @@ namespace ConsoleCalculatorGIT
             var sequences = ExtractSequences(text, foregroundColor, highlightColor);
 
             // Iterate through all sequences and write them to the console
-            foreach (var sequence in sequences)
+            foreach (var (Text, Color) in sequences)
             {
-                Console.ForegroundColor = sequence.Color;
+                Console.ForegroundColor = Color;
                 Console.BackgroundColor = backgroundColor;
-                Console.Write(sequence.Text);
+                Console.Write(Text);
             }
 
             if (newLine) Console.WriteLine();
         }
 
-        private static void WriteSystemText(string text)
-        {
-            // Write a system text with default color scheme
-            if (text != "") Write(text, DefaultSystemColor, DefaultBackgroundColor, DefaultSystemHighlightColor, false);
-        }
-
+        /// <summary>Wait for the user to acknowledge something. The method returns when the user presses any key.</summary>
+        /// <param name="text">The prompt message to display.</param>
         public static void Wait(string text = "")
         {
             WriteSystemText(text);
@@ -76,10 +91,16 @@ namespace ConsoleCalculatorGIT
             if (text != "") Console.WriteLine();
         }
 
+        /// <summary>Ask the user to press any of the specifed keys. Will not return until the user has pressed
+        ///          any of the specified keys. All other key presses will be suppressed.</summary>
+        /// <param name="text">The prompt message to display.</param>
+        /// <param name="acceptedKeys">The key or keys to expect. Must specify at least one key.</param>
+        /// <returns>The <see cref="ConsoleKey"/> value of the key that was pressed.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static ConsoleKey ExpectKey(string text, params ConsoleKey[] acceptedKeys)
         {
             // Check for parameter error
-            if (acceptedKeys.Length == 0) throw new Exception("Parameter acceptedKeys must contain at least one member");
+            if (acceptedKeys.Length == 0) throw new ArgumentNullException(nameof(acceptedKeys));
 
             Write(text);
 
@@ -87,7 +108,7 @@ namespace ConsoleCalculatorGIT
             while (true)
             {
                 // Write the available key options
-                WriteKeyOptions(text, acceptedKeys);
+                WriteKeyOptions(acceptedKeys);
 
                 // Wait for the user to press any key, then check if the key was valid
                 ConsoleKey key = Console.ReadKey(true).Key;
@@ -103,23 +124,43 @@ namespace ConsoleCalculatorGIT
             }
         }
 
+        /// <summary>Asks the user to confirm using the <see cref="DefaultYesKey"/> key or the <see cref="DefaultNoKey"/> key.
+        ///          Will not return until either of those keys is pressed. All other keys will be suppressed.</summary>
+        /// <param name="text">The prompt message to display.</param>
+        /// <returns>A boolean that is true if the user selected yes, otherwise false.</returns>
         public static bool Confirm(string text) => ExpectKey(text, DefaultYesKey, DefaultNoKey) == DefaultYesKey;
 
+        /// <summary>Clear the console and set the background color to the <see cref="DefaultBackgroundColor"/> value.</summary>
         public static void Clear() => Clear(DefaultBackgroundColor);
 
+        /// <summary>Clear the console and set the background color.</summary>
+        /// <param name="color">The <see cref="ConsoleColor"/> value to set the background to.</param>
         public static void Clear(ConsoleColor color)
         {
             Console.BackgroundColor = color;
             Console.Clear();
         }
 
+        /// <summary>Prints a menu that can be navigated using the up/down keyboard keys.</summary>
+        /// <param name="text">The mesage to display above the menu.</param>
+        /// <param name="defaultIndex">The index of the menu item to be initially selected.</param>
+        /// <param name="menuItems">Add the text of the menu options to print. The array must contain at least one member.</param>
+        /// <returns>The zero-based index of the selected menu item.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static int Menu(string text, int defaultIndex, params string[] menuItems)
         {
             // This method prints a navigatable menu which lets the end user choose
             // between options that is passed in to the method.
             // The method refreshes the currently- and last selected options instead
-            // of rewriting the entire menu in order to avoid glitching.
+            // of rewriting the entire menu, in order to avoid glitching.
             // The index of the selected menu option is returned when selected.
+
+            // Check for errors regarding the defaultIndex parameter
+            if (defaultIndex < 0) throw new ArgumentOutOfRangeException(nameof(defaultIndex));
+            if (defaultIndex >= menuItems.Length) throw new ArgumentOutOfRangeException(nameof(defaultIndex));
+
+            // Check for errors regarding the menuItems parameter
+            if (menuItems.Length == 0) throw new ArgumentNullException(nameof(menuItems));
 
             // Clear the console and write the message and a navigation explanation
             Clear();
@@ -127,11 +168,7 @@ namespace ConsoleCalculatorGIT
             Console.CursorVisible = false;
 
             WriteSystemText("Tryck på {upp}- eller {nedpil} för att navigera i menyn.\n" +
-                              "Tryck på {enter} för att välja alternativ.\n\n");
-
-            // Check for errors regarding the parameter defaultIndex
-            if (defaultIndex < 0) throw new ArgumentOutOfRangeException("The index must be 0 or greater.");
-            if (defaultIndex >= menuItems.Length) throw new ArgumentOutOfRangeException("The index must be less than or equal to the number of menu options.");
+                            "Tryck på {enter} för att välja alternativ.\n\n");
 
             // Write the menu items
             int index = defaultIndex;
@@ -197,6 +234,12 @@ namespace ConsoleCalculatorGIT
             return index;
         }
 
+        /// <summary>Ask the user to enter a string into the console, then return the validated result.
+        ///          Will print an error message if the users input is not accepted.
+        ///          Will also continue to run until the user has entered an acceptable input.</summary>
+        /// <param name="text">The prompt message to display.</param>
+        /// <param name="acceptEmpty">(Optional) Set to true if the user is allowed to enter an empty string. Default is false.</param>
+        /// <returns>A string that contains the users input.</returns>
         public static string GetString(string text, bool acceptEmpty = false)
         {
             // Stay inside a loop until we are satisfied with the input from the end user
@@ -221,6 +264,11 @@ namespace ConsoleCalculatorGIT
             }
         }
 
+        /// <summary>Ask the user to enter a number into the console, then return the validated result.
+        ///          Will print an error message if the users input is not accepted.
+        ///          Will also continue to run until the user has entered an acceptable input.</summary>
+        /// <param name="text">The prompt message to display.</param>
+        /// <returns>A double that contains the users input.</returns>
         public static double GetDouble(string text)
         {
             // Stay inside a loop until we are satisfied with the input from the end user
@@ -262,7 +310,13 @@ namespace ConsoleCalculatorGIT
 
         // Private methods
 
-        private static void WriteKeyOptions(string text, ConsoleKey[] acceptedKeys)
+        private static void WriteSystemText(string text)
+        {
+            // Write a system text with default color scheme
+            if (text != "") Write(text, DefaultSystemColor, DefaultBackgroundColor, DefaultSystemHighlightColor, false);
+        }
+
+        private static void WriteKeyOptions(ConsoleKey[] acceptedKeys)
         {
             // Create a string that displays the option of keys that are available to the user
             string keyOptionString = "Väntar på ditt svar (";
@@ -281,14 +335,18 @@ namespace ConsoleCalculatorGIT
 
         private static void WriteGetText(string text)
         {
-            string check = text.TrimEnd();
+            // Used by the GetString and GetDouble methods.
+            // Will print the specified text to the console and make sure that it is correctly formatted:
+            // i.e. must end with either a question mark or a colon.
 
-            if (check.Length > 0 && (check[^1] != ':' && check[^1] != '?' && check[^1] != '='))
-                check += ": ";
+            string checkedText = text.TrimEnd(); // Remove the trailing white space
 
-            if (check.Length > 0 && check[^1] != ' ') check += " ";
+            if (checkedText.Length > 0 && (checkedText[^1] != ':' && checkedText[^1] != '?' && checkedText[^1] != '='))
+                checkedText += ": ";
 
-            Write(check, false);
+            if (checkedText.Length > 0 && checkedText[^1] != ' ') checkedText += " ";
+
+            Write(checkedText, false);
         }
 
         private static void WriteValidInput(string input) =>
