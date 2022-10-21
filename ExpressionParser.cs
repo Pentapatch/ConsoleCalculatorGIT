@@ -2,6 +2,10 @@
 {
     internal static class ExpressionParser
     {
+        // ###################
+        // ## Configuration ##
+        // ###################
+
         // Set up operators and symbols
         private const char AdditionOperator = '+';
         private const char SubtractionOperator = '-';
@@ -10,8 +14,6 @@
         private const char ModulusOperator = '%';
         private const char ExponentiationOperator = '^';
         private const char PiSymbol = 'π';
-
-        // 
 
         /// <summary>Take in a math expression in the form of a string and transform it into a list of tokens to be further processed
         ///          using the <see cref="ParseExpression(List{string})"/> method.</summary>

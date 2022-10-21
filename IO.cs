@@ -8,15 +8,9 @@ namespace ConsoleCalculatorGIT
     ///          color management and menu operations.</summary>
     internal static class IO
     {
-        // This class handles all input and output between the console and the end user.
-        // It validates the input before returning it to the calling method,
-        // and formats the output before writing to the console.
-        // It is marked as static because it will not handle instanced data.
-
-        // Usage examples:
-        // IO.Write("1 {+} 2 {*} 3 {/} 4 {=} 5") // Will print the sequence and highlight the operators;
-        // if (IO.Confirm("Vill du skriva in ett nytt värde?")) { */ Do something */ };
-        // switch (IO.Menu("Visa meny.", "Alt 1", "Alt 2", "Alt 3")) { /* case 0: ... */ };
+        // ###################
+        // ## Configuration ##
+        // ###################
 
         // Set up the default color scheme to use
         public const ConsoleColor DefaultForegroundColor = ConsoleColor.Gray;
@@ -33,7 +27,9 @@ namespace ConsoleCalculatorGIT
         // Set up menu behaviour (Note: Is set to static readonly and not const in order to disable unreachable code warning)
         public static readonly bool WrapArroundMenu = true;
 
-        // Public methods
+        // ####################
+        // ## Public methods ##
+        // ####################
 
         /// <summary>Write a new line to the console.</summary>
         public static void Write() => Write("\n", false);
@@ -294,22 +290,24 @@ namespace ConsoleCalculatorGIT
                 catch (OverflowException)
                 {
                     Console.SetCursorPosition(Left, Top);
-                    Write("Ogiltig input - Värdet överskrider datatypens kapacitet", DefaultErrorColor);
+                    Write("Ogiltig input - Värdet överskrider datatypens kapacitet.", DefaultErrorColor);
                 }
                 catch (FormatException)
                 {
                     Console.SetCursorPosition(Left, Top);
-                    Write("Ogiltig input - Kunde inte konvertera till ett nummer", DefaultErrorColor);
+                    Write("Ogiltig input - Kunde inte konvertera till ett nummer.", DefaultErrorColor);
                 }
                 catch (NullReferenceException)
                 {
                     Console.SetCursorPosition(Left, Top);
-                    Write("Ogiltig input - Värdet kan inte vara null", DefaultErrorColor);
+                    Write("Ogiltig input - Värdet kan inte vara null.", DefaultErrorColor);
                 }
             }
         }
 
-        // Private methods
+        // #####################
+        // ## Private methods ##
+        // #####################
 
         /// <summary>Write a text using the default system color scheme.</summary>
         /// <param name="text">The text to write.</param>

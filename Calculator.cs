@@ -1,18 +1,25 @@
 ﻿namespace ConsoleCalculatorGIT
 {
+    /// <summary>This is the main program. Call the <see cref="Run"/> method from the entry point in order to run the calculator.</summary>
     internal static class Calculator
     {
-        // Private fields, properties and consts
+        // ###########################################
+        // ## Private fields, properties and consts ##
+        // ###########################################
 
         private static List<string> history = new();
 
+        /// <summary>Set this flag to true when the help section has automatically be shown once.</summary>
         private static bool helpShown = false;
 
+        /// <summary>Set this flag to true in order to exit from all context menus.</summary>
         private static bool ExitToMain { get; set; } = false;
 
         private const string DefaultTitle = "S.A. Calculator by Dennis Hankvist";
 
-        // Public methods
+        // ####################
+        // ## Public methods ##
+        // ####################
 
         public static void Run()
         {
@@ -21,9 +28,13 @@
             MainMenu();
         }
 
+        // #####################
+        // ## Private methods ##
+        // #####################
+
+        /// <summary>Write a welcoming message to the console.</summary>
         private static void DisplayWelcomeMessage()
         {
-            // This method writes a welcome message to the end user
             IO.Clear();
             IO.Write(@" {_____}   {___}   _____       _            _       _             ");
             IO.Write(@"{/  ___|} {/ _ \} /  __ \     | |          | |     | |            ");
@@ -39,10 +50,11 @@
             IO.Wait("Tryck på valfri knapp för att fortsätta...");
         }
 
+        /// <summary>Display the main menu.</summary>
         private static void MainMenu()
         {
-            // Stay inside a loop until the end user exits the application via the menu
-            int index = 0;
+            // Stay inside a loop until the user exits the application via the menu
+            int index = 0; // <-- Store the index of the currently selected option outside of the loop
             while (true)
             {
                 Console.Title = DefaultTitle;
@@ -68,21 +80,19 @@
                     case 3: // Avsluta programmet
                         Environment.Exit(0);
                         break;
-                    default:
-                        break;
                 }
 
                 ExitToMain = false; // Reset flag
             }
         }
 
+        /// <summary>Print a help section to the console.</summary>
         private static void ViewHelp()
         {
-            // This method writes a help section to the end user
-
             Console.Title = $"{DefaultTitle} - Hjälpavsnitt";
 
-            helpShown = true; // Do not automatically show this if already shown once
+            // Reset the helpShown flag so that this method won't automatically be called again
+            helpShown = true;
 
             IO.Clear();
             IO.Write("MULTI-UTTRYCK", IO.DefaultHighlightColor);
