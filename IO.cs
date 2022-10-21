@@ -2,6 +2,10 @@
 
 namespace ConsoleCalculatorGIT
 {
+    /// <summary>Contains methods that can be used to interact with the user using the <see cref="Console"/> class.
+    ///          Has methods for writing to the console, reading a string or a double from the console and
+    ///          printing a navigatable menu. The purpose of this class is to simplify error handling,
+    ///          color management and menu operations.</summary>
     internal static class IO
     {
         // This class handles all input and output between the console and the end user.
@@ -141,7 +145,9 @@ namespace ConsoleCalculatorGIT
             Console.Clear();
         }
 
-        /// <summary>Prints a menu that can be navigated using the up/down keyboard keys.</summary>
+        /// <summary>Prints a menu with custom options that the user can navigate using the up/down keyboard keys.
+        ///          Refreshes only the currently selected and the previously selected option in order to avoid flickering
+        ///          in the console. Returns only when the user selects an option using the enter key.</summary>
         /// <param name="text">The mesage to display above the menu.</param>
         /// <param name="defaultIndex">The index of the menu item to be initially selected.</param>
         /// <param name="menuItems">Add the text of the menu options to print. The array must contain at least one member.</param>
@@ -149,12 +155,6 @@ namespace ConsoleCalculatorGIT
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static int Menu(string text, int defaultIndex, params string[] menuItems)
         {
-            // This method prints a navigatable menu which lets the end user choose
-            // between options that is passed in to the method.
-            // The method refreshes the currently- and last selected options instead
-            // of rewriting the entire menu, in order to avoid glitching.
-            // The index of the selected menu option is returned when selected.
-
             // Check for errors regarding the defaultIndex parameter
             if (defaultIndex < 0) throw new ArgumentOutOfRangeException(nameof(defaultIndex));
             if (defaultIndex >= menuItems.Length) throw new ArgumentOutOfRangeException(nameof(defaultIndex));
@@ -283,6 +283,7 @@ namespace ConsoleCalculatorGIT
                 string? input = Console.ReadLine();
 
                 // Validate and return the input
+                // Do not throw errors, print them to the user instead and let them try again
                 try
                 {
                     if (input == null) throw new NullReferenceException();
@@ -310,12 +311,15 @@ namespace ConsoleCalculatorGIT
 
         // Private methods
 
+        /// <summary>Write a text using the default system color scheme.</summary>
+        /// <param name="text">The text to write.</param>
         private static void WriteSystemText(string text)
         {
-            // Write a system text with default color scheme
             if (text != "") Write(text, DefaultSystemColor, DefaultBackgroundColor, DefaultSystemHighlightColor, false);
         }
 
+        /// <summary>Write out the option of keys that the user is expected to press.</summary>
+        /// <param name="acceptedKeys">An array containing the keys.</param>
         private static void WriteKeyOptions(ConsoleKey[] acceptedKeys)
         {
             // Create a string that displays the option of keys that are available to the user
@@ -333,12 +337,12 @@ namespace ConsoleCalculatorGIT
             WriteSystemText(keyOptionString);
         }
 
+        /// <summary>Used by <see cref="GetString(string, bool)"/> and <see cref="GetDouble(string)"/>.
+        ///          Will print the specified text to the console and make sure that it is correctly formatted
+        ///          (i.e. must end with either a question mark or a colon).</summary>
+        /// <param name="text"></param>
         private static void WriteGetText(string text)
         {
-            // Used by the GetString and GetDouble methods.
-            // Will print the specified text to the console and make sure that it is correctly formatted:
-            // i.e. must end with either a question mark or a colon.
-
             string checkedText = text.TrimEnd(); // Remove the trailing white space
 
             if (checkedText.Length > 0 && (checkedText[^1] != ':' && checkedText[^1] != '?' && checkedText[^1] != '='))
@@ -349,20 +353,29 @@ namespace ConsoleCalculatorGIT
             Write(checkedText, false);
         }
 
+        /// <summary>Used by the <see cref="ExpectKey(string, ConsoleKey[])"/> method.
+        ///          Writes the users input using the default system color scheme.</summary>
+        /// <param name="input">The input from the user.</param>
         private static void WriteValidInput(string input) =>
             Write(": {" + input + "}", DefaultSystemColor, DefaultBackgroundColor, DefaultForegroundColor);
 
+        /// <summary>Used by the <see cref="ExpectKey(string, ConsoleKey[])"/> method.
+        ///          Writes the users input using the default error color scheme.</summary>
+        /// <param name="input">The input from the user.</param>
         private static void WriteInvalidInput(string input) =>
             Write(": {" + input + "}", DefaultSystemColor, DefaultBackgroundColor, DefaultErrorColor);
 
+        /// <summary>This method is using regular expressions in order to separate sequences of chars that
+        ///          are encapsulated inside curly braces, in order to highlight them in another color.
+        ///          The method also checks for escape characters (i.e. {{word}} should be written as {word}
+        ///          in the default color).</summary>
+        /// <param name="text"></param>
+        /// <param name="defaultColor"></param>
+        /// <param name="highlightColor"></param>
+        /// <returns></returns>
         private static (string Text, ConsoleColor Color)[] ExtractSequences(string text,
             ConsoleColor defaultColor, ConsoleColor highlightColor)
         {
-            // This method is using regular expressions in order to separate sequences of chars that
-            // are encapsulated inside curly braces, in order to highlight them in another color.
-            // The method also checks for escape characters (i.e. {{word}} should be written as {word}
-            // in the default color).
-
             var regex = new Regex("{[^}]+}+|[^{}]+");
             // {[^}]*}+ checks for a sequence that begins with { and takes everything that comes next
             //          until a } is encountered
