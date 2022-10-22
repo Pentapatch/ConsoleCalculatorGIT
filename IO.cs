@@ -194,6 +194,9 @@ namespace ConsoleCalculatorGIT
                     case ConsoleKey.Enter:
                         exitLoop = true;
                         break;
+                    case ConsoleKey.Escape:
+                        index = menuItems.Length - 1;
+                        break;
                 }
 
                 // If the user pressed enter: Break the loop
