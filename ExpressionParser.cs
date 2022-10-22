@@ -13,7 +13,6 @@
         private const char DivisionOperator = '/';
         private const char ModulusOperator = '%';
         private const char ExponentiationOperator = '^';
-        private const char PiSymbol = 'π';
 
         /// <summary>Take in a math expression in the form of a string and transform it into a list of tokens to be further processed
         ///          using the <see cref="ParseExpression(List{string})"/> method.</summary>
@@ -54,7 +53,7 @@
                                 isNegativeNumber = true;
                             else
                                 // Is not a negative number: raise exception
-                                throw new Exception("Input is missing a left hand value.");
+                                throw new Exception("En operator saknar en term på vänster sida.");
                         }
 
                         // Add the operator as a new token, then add a new empty token
@@ -73,7 +72,7 @@
 
                         // If the character is a decimal place: Make sure that the current token does not already contain one decimal place
                         if (currentChar == ',' && tokens[^1].Contains(','))
-                            throw new Exception("Value cannot contain two decimal places.");
+                            throw new Exception("En term får inte innehålla två decimal punkter.");
                         break;
                 }
 
@@ -83,7 +82,7 @@
 
             // Make sure that the last token is set (otherwise it is a faulty input)
             if (tokens[^1] == "")
-                throw new Exception("Input is missing a right hand value.");
+                throw new Exception("En operator saknar en term på höger sida.");
 
             // Return the list of tokens
             return tokens;
@@ -96,7 +95,7 @@
         /// <exception cref="DivideByZeroException"></exception>
         public static double ParseExpression(List<string> tokens)
         {
-            // Copy the list of tokens
+            // Copy the list of tokens (because the parser works by replacing tokens that's been processed)
             List<string> privateTokens = new(tokens);
 
             // Set up variables
