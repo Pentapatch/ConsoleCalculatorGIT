@@ -79,7 +79,7 @@
                         ViewHelp();
                         break;
                     case 3: // Avsluta programmet
-                        Environment.Exit(0);
+                        if(IO.Confirm("Är du säker på att du vill avsluta?")) Environment.Exit(0);
                         break;
                 }
 
@@ -133,51 +133,54 @@
             // Display the help section if it has not been viewed already
             if (!helpShown) ViewHelp();
 
-            Console.Title = $"{DefaultTitle} - Ny beräkning";
-
-            // Let the end user enter their calculation
-            IO.Clear();
-            string test = IO.GetString("Skriv in ditt uttryck", true);
-
-            // Check if we should abort (user left an empty answer)
-            if (test == "") return;
-
-            // Try to parse the expresion
-            try
+            while (true)
             {
-                // Tokenize the input
-                List<string> tokens = ExpressionParser.TokenizeInput(test);
+                Console.Title = $"{DefaultTitle} - Ny beräkning";
 
-                // Parse the expression using the tokens
-                double result = ExpressionParser.ParseExpression(tokens);
-
-                // Print the result to the console
+                // Let the end user enter their calculation
                 IO.Clear();
-                string resultString = ExpressionParser.FormatExpression(tokens) + " {=} " + result.ToString();
+                string test = IO.GetString("Skriv in ditt uttryck", true);
 
-                // Store the result in the history list
-                history.Add(resultString);
+                // Check if we should abort (user left an empty answer)
+                if (test == "") return;
 
-                // Display a sub menu and let the user chose their next step
-                CalculationContextMenu($"Resultat: {resultString}");
+                // Try to parse the expresion
+                try
+                {
+                    // Tokenize the input
+                    List<string> tokens = ExpressionParser.TokenizeInput(test);
 
-                // Exit the method
-                return;
+                    // Parse the expression using the tokens
+                    double result = ExpressionParser.ParseExpression(tokens);
+
+                    // Print the result to the console
+                    IO.Clear();
+                    string resultString = ExpressionParser.FormatExpression(tokens) + " {=} " + result.ToString();
+
+                    // Store the result in the history list
+                    history.Add(resultString);
+
+                    // Display a sub menu and let the user chose their next step
+                    CalculationContextMenu($"Resultat: {resultString}");
+
+                    // Exit the method
+                    return;
+                }
+                catch (DivideByZeroException)
+                {
+                    IO.Write("Ogiltig inmatning: Det går inte att dividera med noll.", ConsoleColor.Red);
+                }
+                catch (Exception e)
+                {
+                    if (e.Message != "")
+                        IO.Write($"Ogiltig inmatning: {e.Message}", ConsoleColor.Red);
+                    else
+                        IO.Write("Ogiltig inmatning", ConsoleColor.Red);
+                }
+
+                // Wait for the user to acknowledge the error
+                IO.Wait("Tryck på valfri knapp för att försöka igen..");
             }
-            catch (DivideByZeroException)
-            {
-                IO.Write("Ogiltig inmatning: Det går inte att dividera med noll.", ConsoleColor.Red);
-            }
-            catch (Exception e)
-            {
-                if (e.Message != "")
-                    IO.Write($"Ogiltig inmatning: {e.Message}", ConsoleColor.Red);
-                else
-                    IO.Write("Ogiltig inmatning", ConsoleColor.Red);
-            }
-
-            // Wait for the user to acknowledge the error
-            IO.Wait("Tryck på valfri knapp för att försöka igen..");
         }
 
         private static void CalculationContextMenu(string result)
@@ -188,11 +191,11 @@
                 Console.Title = $"{DefaultTitle} - Beräkningsresultat";
 
                 // Display the context menu and store the selected index
-                index = IO.Menu(result, index, "Gör en ny beräkning", 
+                index = IO.Menu(result, index, "Gör en ny beräkning",
                                                "Visa beräkningssteg",
                                                "Visa historik",
                                                "Gå tillbaka till huvudmenyn");
-                
+
                 // Select what to do based on what option the user chosed
                 switch (index)
                 {
@@ -200,6 +203,8 @@
                         NewCalculationPrompt();
                         return;
                     case 1: // Visa beräkningssteg
+                        IO.Write("Den här funktionen är tyvärr inte implementerad ännu.", ConsoleColor.Red);
+                        IO.Wait("Tryck på valfri knapp för att fortsätta..");
                         break;
                     case 2: // Visa historik
                         ViewHistory(false);
@@ -211,27 +216,52 @@
             }
         }
 
+        /// <summary>Displays the history list and displays a menu that lets the user choose to clear the list,
+        ///          go back or go back to the main menu.</summary>
+        /// <param name="fromMainMenu">Set to true if this method is called from within the main menu (will
+        ///                            disable the return to main menu option).</param>
         private static void ViewHistory(bool fromMainMenu)
         {
-            Console.Title = $"{DefaultTitle} - Historik";
-            // Create a string that contains all history in descending order
-            string text = "Visar historik:\n";
+            // Set up the default option texts
+            const string DefaultGoBack = "Gå tillbaka";
+            const string DefaultGoBackToMain = "Tillbaka till huvudmenyn";
+            const string DefaultClearHistory = "Rensa historiken";
 
-            for (int i = history.Count - 1; i >= 0; i--)
-                text += $"{i + 1}: {history[i]}\n";
-
-            if (history.Count == 0) text += "Det finns ingen historik att visa..\n";
-
-            if (!fromMainMenu)
+            int index = history.Count == 0 ? 0 : 1; // <-- Select "Go back" by default
+            while (true)
             {
-                // Display the history list and a menu that lets the user go back or go back to the main menu
-                if (IO.Menu(text, 0, "Gå tillbaka", "Gå tillbaka till huvudmenyn") == 1) ExitToMain = true;
-            }
-            else
-            {
-                // Wait for the user to acknowledge
-                IO.Write(text);
-                IO.Wait("Tryck på valfri knapp för att gå tillbaka..");
+                Console.Title = $"{DefaultTitle} - Historik";
+
+                // Create a string that contains all history in descending order
+                string text = "Visar historik:\n";
+
+                for (int i = history.Count - 1; i >= 0; i--)
+                    text += $"{i + 1}) {history[i]}\n";
+
+                if (history.Count == 0) text += "Det finns ingen historik att visa..\n";
+
+                // Create a list of options
+                List<string> options = new() { DefaultGoBack };
+                if (!fromMainMenu) options.Add(DefaultGoBackToMain);
+                if (history.Count > 0) options.Insert(0, DefaultClearHistory);
+
+                // Display the menu
+                index = IO.Menu(text, index, options.ToArray());
+                switch (options[index])
+                {
+                    case DefaultGoBack:
+                        return;
+                    case DefaultGoBackToMain:
+                        ExitToMain = true;
+                        return;
+                    case DefaultClearHistory:
+                        if (IO.Confirm("Är du säker på att du vill rensa historiken"))
+                        {
+                            history.Clear();
+                            index = 0; // Reset the index, because the number of options might changes at the next iteration
+                        }
+                        break;
+                }
             }
         }
 
