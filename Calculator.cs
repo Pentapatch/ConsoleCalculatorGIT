@@ -50,7 +50,8 @@
             IO.Wait("Tryck på valfri knapp för att fortsätta...");
         }
 
-        /// <summary>Display the main menu.</summary>
+        /// <summary>Display the main menu.
+        ///          Will never return from this method. The user can choose to exit the application.</summary>
         private static void MainMenu()
         {
             // Stay inside a loop until the user exits the application via the menu

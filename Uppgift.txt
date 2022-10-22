@@ -5,7 +5,9 @@ Varje resultat ska sparas i en lista. Klistra in pseudokoden som innehåller ins
 i ditt projekt och följ den under ditt kodande.
 
 Analysera och utvärdera gränssnitt, designmönster och lösningar i din kod och föreslå vidare utökningar.
+-----------------------													      --------------------------
 Skapa en GIT repository, och använda sig av GIT genom att göra olika versionen av din kod.
+
 
 // Checklista
 [X] Input/output 					- IO Class that handles all basic interaction
@@ -13,6 +15,7 @@ Skapa en GIT repository, och använda sig av GIT genom att göra olika versionen
 [X] Kontrollstrukturer				- If/If else/Else, While, For
 [ ] Välja lämpligt designmönster
 [X] Källkodshantering med GIT		- Repository med branches
+
 
 // Skall påvisa kunskaper om:
 1. Konstruktion av enkla program innehållande kontrollstrukturer
@@ -25,6 +28,7 @@ Skapa en GIT repository, och använda sig av GIT genom att göra olika versionen
 6. Hantera dataflöde som sker genom gränssnitt, input/output
 7. Använda samlingsklasser
 8. Använda källkodshantering med GIT
+
 
 // PSEUDOKOD
 

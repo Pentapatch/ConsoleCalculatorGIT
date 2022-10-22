@@ -11,7 +11,7 @@
 // [ ] Fråga användaren om den vill avsluta eller fortsätta.
 
 // ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
-// ¤¤ SEE THE 'README.md' FOR MY REFLECTIONS OF THIS ASSIGNMENT ¤¤
+// ¤¤ SEE THE 'README.md' FOR MY REFLECTIONS ON THIS ASSIGNMENT ¤¤
 // ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
 
 using ConsoleCalculatorGIT;
