@@ -63,17 +63,17 @@
                 // Display a menu to let the user choose the next action
                 index = IO.Menu("Välj vad du vill göra härnäst.", index,
                                 "Starta ny beräkning",
-                                "Visa beräkningshistorik",
+                                "Visa historik",
                                 "Visa hjälp",
                                 "Avsluta programmet");
 
                 switch (index)
                 {
                     case 0: // Starta ny beräkning
-                        NewCalculation();
+                        NewCalculationPrompt();
                         break;
-                    case 1: // Visa beräkningshistorik
-
+                    case 1: // Visa historik
+                        ViewHistory(true);
                         break;
                     case 2: // Visa hjälp
                         ViewHelp();
@@ -128,7 +128,7 @@
             IO.Wait("Tryck på valfri knapp för att fortsätta...");
         }
 
-        private static void NewCalculation()
+        private static void NewCalculationPrompt()
         {
             // Display the help section if it has not been viewed already
             if (!helpShown) ViewHelp();
@@ -139,18 +139,30 @@
             IO.Clear();
             string test = IO.GetString("Skriv in ditt uttryck", true);
 
-            // Check if we should abort (left an empty answer)
+            // Check if we should abort (user left an empty answer)
             if (test == "") return;
 
-            //int test2 = ExpressionParser.ParseExpression(new List<string> { "2", "*", "4", "-", "-5", "^", "3" });
-
+            // Try to parse the expresion
             try
             {
+                // Tokenize the input
                 List<string> tokens = ExpressionParser.TokenizeInput(test);
+
+                // Parse the expression using the tokens
                 double result = ExpressionParser.ParseExpression(tokens);
+
+                // Print the result to the console
                 IO.Clear();
-                string resultString = "Resultat: " + ExpressionParser.FormatExpression(tokens) + " {=} " + result.ToString();
-                IO.Menu(resultString, 0, "Gör en ny beräkning", "Visa beräkningssteg", "Visa historik", "Gå tillbaka till huvudmenyn");
+                string resultString = ExpressionParser.FormatExpression(tokens) + " {=} " + result.ToString();
+
+                // Store the result in the history list
+                history.Add(resultString);
+
+                // Display a sub menu and let the user chose their next step
+                CalculationContextMenu($"Resultat: {resultString}");
+
+                // Exit the method
+                return;
             }
             catch (DivideByZeroException)
             {
@@ -164,11 +176,63 @@
                     IO.Write("Ogiltig inmatning", ConsoleColor.Red);
             }
 
+            // Wait for the user to acknowledge the error
+            IO.Wait("Tryck på valfri knapp för att försöka igen..");
+        }
 
-            //IO.Write(ExpressionParser.FormatExpression(ExpressionParser.TokenizeInput(test)));
-            //int test2 = ExpressionParser.ParseExpression(ExpressionParser.TokenizeInput(test));
-            //IO.Write(test2.ToString());
-            IO.Wait();
+        private static void CalculationContextMenu(string result)
+        {
+            int index = 0;
+            while (!ExitToMain)
+            {
+                Console.Title = $"{DefaultTitle} - Beräkningsresultat";
+
+                // Display the context menu and store the selected index
+                index = IO.Menu(result, index, "Gör en ny beräkning", 
+                                               "Visa beräkningssteg",
+                                               "Visa historik",
+                                               "Gå tillbaka till huvudmenyn");
+                
+                // Select what to do based on what option the user chosed
+                switch (index)
+                {
+                    case 0: // Gör en ny beräkning
+                        NewCalculationPrompt();
+                        return;
+                    case 1: // Visa beräkningssteg
+                        break;
+                    case 2: // Visa historik
+                        ViewHistory(false);
+                        break;
+                    case 3: // Gå tillbaka till huvudmenyn
+                        ExitToMain = true;
+                        return;
+                }
+            }
+        }
+
+        private static void ViewHistory(bool fromMainMenu)
+        {
+            Console.Title = $"{DefaultTitle} - Historik";
+            // Create a string that contains all history in descending order
+            string text = "Visar historik:\n";
+
+            for (int i = history.Count - 1; i >= 0; i--)
+                text += $"{i + 1}: {history[i]}\n";
+
+            if (history.Count == 0) text += "Det finns ingen historik att visa..\n";
+
+            if (!fromMainMenu)
+            {
+                // Display the history list and a menu that lets the user go back or go back to the main menu
+                if (IO.Menu(text, 0, "Gå tillbaka", "Gå tillbaka till huvudmenyn") == 1) ExitToMain = true;
+            }
+            else
+            {
+                // Wait for the user to acknowledge
+                IO.Write(text);
+                IO.Wait("Tryck på valfri knapp för att gå tillbaka..");
+            }
         }
 
     }
