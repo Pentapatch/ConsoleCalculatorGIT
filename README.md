@@ -88,7 +88,7 @@ metoden:
 
 ```if ((level == 3 && token == "^") || (level == 2 && (token == "*" || token == "/" || token == "%")) || (level == 1 && (token == "+" || token == "-"))) { /* code here */}``` 
 
-Allt samlat på en och samma rad, med flera parenteser och && och || villkor. Denna sats är numer ersatt med en egen metod: 
+Allt samlat på en och samma rad, med flera parenteser och **&&** och **||** villkor. Denna sats är numer ersatt med en egen metod: 
 
 ```private static bool IsNextOperator(char? mathOperator, int level) => ((level, mathOperator)) switch
         {
@@ -111,7 +111,7 @@ Ifall det här projektet skulle växa skulle det vara bra att göra fler konstanter
 Här skulle textsträngen i argumentet med fördel kunna göras om till ```const DefaultWaitMessage = "Tryck på valfri knapp för att fortsätta...";```.
 
 Jag skulle också vilja flytta all validering av ett uttryck till en egen metod. I nuläget kontrollerar ```ExpressionParser.TokenizeInput()``` 
-metoden efter alla uttrycksfel utom **DivideByZeroException**, vilket istället testas för i ```ExpressionParser.ParseExpression()``` metoden. 
+metoden efter alla uttrycksfel utom ```DivideByZeroException```, vilket istället testas för i ```ExpressionParser.ParseExpression()``` metoden. 
 Dessutom skickar jag en generell exception (```new Exception(”Error message here”)```) med ett meddelande vid vissa fel. 
 Här borde jag istället hitta en mer lämplig exception, eller skapa egna klasser som ärver från ```Exception```: 
 ```class OperatorException : Exception```. 
