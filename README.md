@@ -80,10 +80,11 @@ Slutligen vill jag nämna att anledningen till att alla klasser är statiska är fö
 instantiera objekt av dem. Att **Calculator** ligger som en egen klass och inte direkt i *Program.cs*, är för att göra det 
 enklare att testköra olika delar av mitt program direkt via top-level statements i ```Main()```. 
 
-### ARBETSSÄTT
+### FÖRBÄTTRINGSPUNKTER
 Jag anser att kod ofta mår bra av att ses över en andra, eller tredje gång under projektets livstid, för att se om det går 
 att förenkla den (*refactor*). När jag varit ifrån koden ett tag så inser jag ofta att den är alldeles för rörig, för att 
-enkelt kunna överblicka vad den gör. Ett tydligt exempel jag har, är en sats jag hade i ```ParseExpression()``` metoden: 
+enkelt kunna överblicka vad den gör. Ett tydligt exempel jag har, är en sats jag hade i ```ExpressionParser.ParseExpression()``` 
+metoden: 
 
 ```if ((level == 3 && token == "^") || (level == 2 && (token == "*" || token == "/" || token == "%")) || (level == 1 && (token == "+" || token == "-"))) { /* code here */}``` 
 
@@ -109,9 +110,9 @@ Ifall det här projektet skulle växa skulle det vara bra att göra fler konstanter
 
 Här skulle textsträngen i argumentet med fördel kunna göras om till ```const DefaultWaitMessage = "Tryck på valfri knapp för att fortsätta...";```.
 
-Jag skulle också vilja flytta all validering av ett uttryck till en egen metod. I nuläget kontrollerar ```TokenizeInput()``` 
-metoden efter alla uttrycksfel utom **DivideByZeroException**, vilket istället testas för i ```ParseExpression()``` metoden. 
-Dessutom skickar jag en generell exception (```new Exception(”Error message here”```)) med ett meddelande vid vissa fel. 
+Jag skulle också vilja flytta all validering av ett uttryck till en egen metod. I nuläget kontrollerar ```ExpressionParser.TokenizeInput()``` 
+metoden efter alla uttrycksfel utom **DivideByZeroException**, vilket istället testas för i ```ExpressionParser.ParseExpression()``` metoden. 
+Dessutom skickar jag en generell exception (```new Exception(”Error message here”)```) med ett meddelande vid vissa fel. 
 Här borde jag istället hitta en mer lämplig exception, eller skapa egna klasser som ärver från ```Exception```: 
 ```class OperatorException : Exception```. 
 
