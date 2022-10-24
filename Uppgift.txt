@@ -13,7 +13,7 @@ Skapa en GIT repository, och använda sig av GIT genom att göra olika versionen
 [X] Input/output 					- IO Class that handles all basic interaction
 [X] Lista med historik				- (Giltiga uttryck) Lagras som string i lista
 [X] Kontrollstrukturer				- If/If else/Else, While, For
-[ ] Välja lämpligt designmönster
+[/] Välja lämpligt designmönster
 [X] Källkodshantering med GIT		- Repository med branches
 
 

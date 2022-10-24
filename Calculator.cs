@@ -1,6 +1,6 @@
 ﻿namespace ConsoleCalculatorGIT
 {
-    /// <summary>This is the main program. Call the <see cref="Run"/> method from the entry point in order to run the calculator.</summary>
+    /// <summary>This is the main program. Call this method to run the calculator.</summary>
     internal static class Calculator
     {
         // ###########################################
@@ -131,7 +131,7 @@
 
             IO.Write("OPERANDERS RANGORDNING", IO.DefaultHighlightColor);
             IO.Write("Kalkylatorn stödjer korrekt hantering av operanders rangordning.\n" +
-                     "Tyvärr stöds inte specificerad rangordning med hjälp av paranterser ännu.",
+                     "Tyvärr stöds inte specificerad rangordning med hjälp av parenterser ännu.",
                      IO.DefaultForegroundColor, IO.DefaultBackgroundColor, ConsoleColor.Cyan);
             IO.Write("Exempel: I uttrycket \"{2 + 5 * 5}\" så kommer \"{5 * 5}\" beräknas först, därefter \"{2 + 25}\".\n",
                      ConsoleColor.DarkGray, IO.DefaultBackgroundColor, ConsoleColor.Cyan);

@@ -109,7 +109,8 @@
             // Stay in a loop until only one token remain (the final result)
             while (localTokens.Count > 1)
             {
-                bool performCalculation = false; // Flag that indicates that there could be more operators of the current level (continue the while loop)
+                bool performCalculation = false; // Flag that indicates that there could be more operators
+                                                 // of the current level (continue the while loop)
                 char? currentOperator = null;
 
                 // ¤¤ STEP 1: Find the operator with the highest precedence ¤¤
