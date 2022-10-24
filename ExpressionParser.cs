@@ -96,22 +96,22 @@
         public static double ParseExpression(List<string> tokens)
         {
             // Copy the list of tokens (because the parser works by replacing tokens that's been processed)
-            List<string> privateTokens = new(tokens);
+            List<string> localTokens = new(tokens);
 
             // Set up variables
             int level = 3;     // Holds the current level of operation that is being checked for (3 = Exponent, 2 = multiply/divide, 1 = addition/subtraction)
 
             // Stay in a loop until only one token remain (the final result)
-            while (privateTokens.Count > 1)
+            while (localTokens.Count > 1)
             {
                 bool next = false; // Flag that indicates that there could be more operators of the current level (continue the while loop)
 
                 // Loop through all of the tokens in order to find the first one with the highest order of operation
                 string currentOperator = "";
                 int index = -1;
-                for (int i = 0; i < privateTokens.Count; i++)
+                for (int i = 0; i < localTokens.Count; i++)
                 {
-                    string token = privateTokens[i]; // Holds the current token
+                    string token = localTokens[i]; // Holds the current token
 
                     // Check if the current token is an operator of the current level (of order of operation)
                     if ((level == 3 && token == "^") || (level == 2 && (token == "*" || token == "/" || token == "%")) || (level == 1 && (token == "+" || token == "-")))
@@ -133,8 +133,8 @@
                 {
                     // Operator was found: Perform the calculation
                     // Then replace the three affected tokens with the result of the computation
-                    double left = Convert.ToDouble(privateTokens[index - 1].Replace("_", ""));  // The left hand value
-                    double right = Convert.ToDouble(privateTokens[index + 1].Replace("_", "")); // The right hand value
+                    double left = Convert.ToDouble(localTokens[index - 1].Replace("_", ""));  // The left hand value
+                    double right = Convert.ToDouble(localTokens[index + 1].Replace("_", "")); // The right hand value
                     double sum = 0d;
 
                     // Check for divide by zero error
@@ -157,15 +157,15 @@
 
                     // Remove the three currently calculated tokens
                     // Insert a new token that represents the computed sum of the three tokens currently affected
-                    privateTokens.RemoveRange(index - 1, 3);
-                    privateTokens.Insert(index - 1, sum.ToString());
+                    localTokens.RemoveRange(index - 1, 3);
+                    localTokens.Insert(index - 1, sum.ToString());
                 }
                 else
                     // Not found: Decrement to a lower level (of order of operation)
                     level--;
             }
 
-            return Convert.ToDouble(privateTokens[0]);
+            return Convert.ToDouble(localTokens[0]);
         }
 
         public static string FormatExpression(List<string> tokens)

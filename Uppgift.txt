@@ -11,7 +11,7 @@ Skapa en GIT repository, och använda sig av GIT genom att göra olika versionen
 
 // Checklista
 [X] Input/output 					- IO Class that handles all basic interaction
-[ ] Lista med historik
+[X] Lista med historik				- (Giltiga uttryck) Lagras som string i lista
 [X] Kontrollstrukturer				- If/If else/Else, While, For
 [ ] Välja lämpligt designmönster
 [X] Källkodshantering med GIT		- Repository med branches
