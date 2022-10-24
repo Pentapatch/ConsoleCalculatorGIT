@@ -7,7 +7,7 @@
         // ## Private fields, properties and consts ##
         // ###########################################
 
-        private static List<string> history = new();
+        private static readonly List<string> history = new();
 
         /// <summary>Set this flag to true when the help section has automatically be shown once.</summary>
         private static bool helpShown = false;
@@ -15,12 +15,14 @@
         /// <summary>Set this flag to true in order to exit from all context menus.</summary>
         private static bool ExitToMain { get; set; } = false;
 
+        /// <summary>This will be used as the base for the console title.</summary>
         private const string DefaultTitle = "S.A. Calculator by Dennis Hankvist";
 
         // ####################
         // ## Public methods ##
         // ####################
 
+        /// <summary>Call this method to run the calculator program.</summary>
         public static void Run()
         {
             Console.Title = DefaultTitle;
@@ -98,31 +100,40 @@
             IO.Clear();
             IO.Write("MULTI-UTTRYCK", IO.DefaultHighlightColor);
             IO.Write("Kalkylatorn kan hantera flera matematiska operatorer i samma uttryck (expression).");
-            IO.Write("Exempel: {2 + 2 * 3 / 4 % 5} är tillåtet\n",
+            IO.Write("Exempel: \"{2 + 2 * 3 / 4 % 5}\" är tillåtet.\n",
                      ConsoleColor.DarkGray, IO.DefaultBackgroundColor, ConsoleColor.Cyan);
 
             IO.Write("OPERATORER SOM STÖDS", IO.DefaultHighlightColor);
-            IO.Write("{+} addition, {-} subtraktion, {*} multiplicering, {/} dividering, {%} modulus samt {^} exponent\n",
+            IO.Write("{+} för addition, {-} för subtraktion, {*} för multiplicering, {/} för dividering" +
+                     ", {%} för modulus samt för {^} exponent.\n",
                      IO.DefaultForegroundColor, IO.DefaultBackgroundColor, ConsoleColor.Cyan);
 
             IO.Write("NEGATIVA TAL", IO.DefaultHighlightColor);
-            IO.Write("Kalkylatorn hanterar även negativa tal");
-            IO.Write("Exempel: {-2 - -2} är tillåtet\n",
+            IO.Write("Kalkylatorn hanterar även negativa tal.");
+            IO.Write("Exempel: \"{-2 - -2}\" är tillåtet.\n",
                      ConsoleColor.DarkGray, IO.DefaultBackgroundColor, ConsoleColor.Cyan);
 
             IO.Write("WHITESPACE", IO.DefaultHighlightColor);
-            IO.Write("Kalkylatorn ignorerar all white space.");
-            IO.Write("Exempel: {7--2*5} är tillåtet\n",
+            IO.Write("Kalkylatorn ignorerar all white space, alla bokstäver och ogiltiga tecken.");
+            IO.Write("Exempel: \"{7--2*5}\" är tillåtet.\n" +
+                     "Exempel: \"{abc12 +5}\" kommer att tolkas som {12 + 5}.\n",
                      ConsoleColor.DarkGray, IO.DefaultBackgroundColor, ConsoleColor.Cyan);
 
             IO.Write("AVBRYTA EN BERÄKNING", IO.DefaultHighlightColor);
-            IO.Write("Lämna ett tomt svar och tryck på {enter} för att avbryta en beräkning.\n",
+            IO.Write("Lämna ett {tomt uttryck} och tryck på ({enter}) för att avbryta en beräkning.\n",
                      IO.DefaultForegroundColor, IO.DefaultBackgroundColor, ConsoleColor.Cyan);
 
             IO.Write("DECIMALTAL", IO.DefaultHighlightColor);
-            IO.Write("Kalkylatorn kan hantera decimaltal genom att använda {,} tecknet.",
+            IO.Write("Kalkylatorn kan hantera decimaltal genom att använda ({,}) kommatecknet.",
                      IO.DefaultForegroundColor, IO.DefaultBackgroundColor, ConsoleColor.Cyan);
-            IO.Write("Exempel: {2,25 * 12,75} är tillåtet\n",
+            IO.Write("Exempel: \"{2,25 * 12,75}\" är tillåtet.\n",
+                     ConsoleColor.DarkGray, IO.DefaultBackgroundColor, ConsoleColor.Cyan);
+
+            IO.Write("OPERANDERS RANGORDNING", IO.DefaultHighlightColor);
+            IO.Write("Kalkylatorn stödjer korrekt hantering av operanders rangordning.\n" +
+                     "Tyvärr stöds inte specificerad rangordning med hjälp av paranterser ännu.",
+                     IO.DefaultForegroundColor, IO.DefaultBackgroundColor, ConsoleColor.Cyan);
+            IO.Write("Exempel: I uttrycket \"{2 + 5 * 5}\" så kommer \"{5 * 5}\" beräknas först, därefter \"{2 + 25}\".\n",
                      ConsoleColor.DarkGray, IO.DefaultBackgroundColor, ConsoleColor.Cyan);
 
             IO.Wait("Tryck på valfri knapp för att fortsätta...");
@@ -236,7 +247,7 @@
                 string text = "Visar historik:\n";
 
                 for (int i = history.Count - 1; i >= 0; i--)
-                    text += $"{i + 1}) {history[i]}\n";
+                    text += $"{{{i + 1})}} {history[i]}\n";
 
                 if (history.Count == 0) text += "Det finns ingen historik att visa..\n";
 
