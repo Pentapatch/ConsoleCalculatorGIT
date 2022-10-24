@@ -1,147 +1,153 @@
 # ConsoleCalculatorGIT
 ## Betygsgrundande uppgift inom Programmering Grund
 
-Av **Dennis Hankvist**, TUC Yrkeshögskola, *Systemutvecklare.NET*
-Norrköping/Linköping, HT2022
+---
 
-Obs: Denna readme är formatterad med GitHub's markdown language, läses bäst på hemsidan.
+*Av **Dennis Hankvist**, TUC YrkeshÃ¶gskola, Systemutvecklare.NET*
+NorrkÃ¶ping/LinkÃ¶ping, HT2022
+
+**Obs! Denna readme Ã¤r formatterad med GitHub's markdown language, lÃ¤ses bÃ¤st pÃ¥ hemsidan.**
+
+---
 
 ### Introduktion
-Då jag redan besitter ganska goda kunskaper inom programmering så ville jag göra min kalkylator något mer avancerad. 
-Att bara kunna välja två tal att addera, subtrahera, multiplicera eller dividera med varandra hade inte tagit så lång tid. 
-Jag ville ha lite mer utmaning, så jag satte upp ett mål att kunna skriva in hur många operatorer i ett uttryck man vill. 
+DÃ¥ jag redan besitter ganska goda kunskaper inom programmering sÃ¥ ville jag gÃ¶ra min kalkylator nÃ¥got mer avancerad. 
+Att bara kunna vÃ¤lja tvÃ¥ tal att addera, subtrahera, multiplicera eller dividera med varandra hade inte tagit sÃ¥ lÃ¥ng tid. 
+Jag ville ha lite mer utmaning, sÃ¥ jag satte upp ett mÃ¥l att kunna skriva in hur mÃ¥nga operatorer i ett uttryck man vill. 
 
-Detta löste jag genom att analysera användarens uttryck och extrahera de delar som är intressanta till en lista (av "tokens"). 
-Jag går sedan igenom den listan och utför kalkylationen steg för steg. Detta påminner mycket om hur en parser fungerar. 
-Men då man måste ta hänsyn till matematiska operatorers prioritetsordning, kände jag att det skulle bli för avancerat 
-att skriva en ordentlig parser (som arbetar med tokens bestående av egna klasser).
-Därför representeras mina tokens helt enkelt av textsträngar (string) och en ”parser”-metod äger ansvaret att kalkylera dem 
-(istället för att kalkylationen görs direkt av en token klass, t.ex. ```AdditionToken.Compute()```). 
-Validering av tokens sker direkt när de skapas i ```TokenizeInput()``` metoden, och inte av en Lexer metod som en ordentlig 
-parser hade använt. Vid sidan av detta projekt har jag dock arbetat på en mer ordentlig parser. 
+Detta lÃ¶ste jag genom att analysera anvÃ¤ndarens uttryck och extrahera de delar som Ã¤r intressanta till en lista (av "tokens"). 
+Jag gÃ¥r sedan igenom den listan och utfÃ¶r kalkylationen steg fÃ¶r steg. Detta pÃ¥minner mycket om hur en parser fungerar. 
+Men dÃ¥ man mÃ¥ste ta hÃ¤nsyn till matematiska operatorers prioritetsordning, kÃ¤nde jag att det skulle bli fÃ¶r avancerat 
+att skriva en ordentlig parser (som arbetar med tokens bestÃ¥ende av egna klasser).
+DÃ¤rfÃ¶r representeras mina tokens helt enkelt av textstrÃ¤ngar (string) och en â€parserâ€-metod Ã¤ger ansvaret att kalkylera dem 
+(istÃ¤llet fÃ¶r att kalkylationen gÃ¶rs direkt av en token klass, t.ex. `AdditionToken.Compute()`). 
+Validering av tokens sker direkt nÃ¤r de skapas i `ExpressionParser.TokenizeInput()` metoden, och inte av en Lexer metod som en 
+ordentlig parser hade anvÃ¤nt. Vid sidan av detta projekt har jag dock arbetat pÃ¥ en mer ordentlig parser. 
 
-### Arbetssätt
-Att använda GIT var för mig helt nytt och det har varit roligt och bra att lära mig ett nytt källkodshanteringssystem. 
-Då jag i början inte var så van vid GIT, arbetade jag i olika projekt för att experimentera lite med koden. 
-Halvvägs in på kursen skapade jag en ny repository på GitHub och har sedan dess arbetat med branches för att utveckla 
-och redigera projektet. Ibland har jag dock gjort mindre ändringar direkt i master-branchen, då det är ett par extra steg 
-för att merge:a ändringar (antar att det är en bad practice?). 
+### ArbetssÃ¤tt
+Att anvÃ¤nda GIT var fÃ¶r mig helt nytt och det har varit roligt och bra att lÃ¤ra mig ett nytt kÃ¤llkodshanteringssystem. 
+DÃ¥ jag i bÃ¶rjan inte var sÃ¥ van vid GIT, arbetade jag i olika projekt fÃ¶r att experimentera lite med koden. 
+HalvvÃ¤gs in pÃ¥ kursen skapade jag en ny repository pÃ¥ GitHub och har sedan dess arbetat med branches fÃ¶r att utveckla 
+och redigera projektet. Ibland har jag dock gjort mindre Ã¤ndringar direkt i master-branchen, dÃ¥ det Ã¤r ett par extra steg 
+fÃ¶r att merge:a Ã¤ndringar (antar att det Ã¤r en *bad practice*?). 
 
-Önskar att jag hade den här kunskapen om GIT till mina tidigare, större hobbyprojekt, som till exempel min bildredigerare 
-som består av flertalet filer och tusentals rader kod. 
+Ã–nskar att jag hade den hÃ¤r kunskapen om GIT till mina tidigare, stÃ¶rre hobbyprojekt, som till exempel min bildredigerare 
+som bestÃ¥r av flertalet filer och tusentals rader kod. 
 
-Jag valde snabbt att bryta ner mitt program till olika delar och låta egna klasser ha sina egna ansvarsområden: 
-- **Calculator** klassen ansvarar för körning av själva programlogiken (navigering i menysystem, nya beräkningar, visa 
-  hjälpavsnitt osv). 
-- **IO** klassen ansvarar för all interaktion med ```Console``` (skriva till konsollen, få tillbaka värden från användaren 
-  genom konsollen, skapa och köra menyer i konsollen). 
-- **ExpressionParser** klassen ansvarar för att skapa och validera tokens, beräkna uttryck med hjälp av dessa tokens 
-  samt formatera uttrycket för bästa läsbarhet. 
+Jag valde snabbt att bryta ner mitt program till olika delar och lÃ¥ta egna klasser ha sina egna ansvarsomrÃ¥den: 
+- `Calculator` klassen ansvarar fÃ¶r kÃ¶rning av sjÃ¤lva programlogiken (navigering i menysystem, nya berÃ¤kningar, visa 
+  hjÃ¤lpavsnitt osv). 
+- `IO` klassen ansvarar fÃ¶r all interaktion med `Console` (skriva till konsollen, fÃ¥ tillbaka vÃ¤rden frÃ¥n anvÃ¤ndaren 
+  genom konsollen, skapa och kÃ¶ra menyer i konsollen). 
+- `ExpressionParser` klassen ansvarar fÃ¶r att skapa och validera tokens, berÃ¤kna uttryck med hjÃ¤lp av dessa tokens 
+  samt formatera uttrycket fÃ¶r bÃ¤sta lÃ¤sbarhet. 
 
-Att ha separerat ansvarsområden till klasser gör det lättare att hitta det man söker, och lättare att expandera och 
-redigera programmet. Dessa klasser har både publika och privata metoder. 
+Att ha separerat ansvarsomrÃ¥den till klasser gÃ¶r det lÃ¤ttare att hitta det man sÃ¶ker, och lÃ¤ttare att expandera och 
+redigera programmet. Dessa klasser har bÃ¥de publika och privata metoder. 
 
-Anledningen till att jag skapade en egen input/output-klass (**IO**) i stället för att använda ```Console.WriteLine()``` 
-eller ```Console.ReadLine()``` är egentligen flerfaldig: 
-1. Minskar riskerna med att ```Console.ForegroundColor``` och ```Console.BackgroundColor``` är *global state* properties. 
-2. Gör det lättare att använda färger (endast en rad kod behövs för att skriva i en ny färg). 
-3. Det låter mig ”highlight:a” ord eller meningar i en annan färg. 
-4. Lättare att konfigurera om ett standard-färgtema om jag vill (genom konstanter som ```const DefaultForegroundColor```). 
-5. Egna metoder för ```IO.GetString()``` och ```IO.GetDouble()``` validerar användarens input direkt och returnerar inte 
-   förrän svaret är godtagbart. 
-6. Lätt att skapa och köra menyer och undermenyer. 
+Anledningen till att jag skapade en egen input/output-klass (**IO**) i stÃ¤llet fÃ¶r att anvÃ¤nda `Console.WriteLine()` 
+eller `Console.ReadLine()` Ã¤r egentligen flerfaldig: 
+1. Minskar riskerna med att `Console.ForegroundColor` och `Console.BackgroundColor` Ã¤r *global state* properties. 
+2. GÃ¶r det lÃ¤ttare att anvÃ¤nda fÃ¤rger (endast en rad kod behÃ¶vs fÃ¶r att skriva i en ny fÃ¤rg). 
+3. Det lÃ¥ter mig â€highlight:aâ€ ord eller meningar i en annan fÃ¤rg. 
+4. LÃ¤ttare att konfigurera om ett standard-fÃ¤rgtema om jag vill (genom konstanter som ```const DefaultForegroundColor```). 
+5. Egna metoder fÃ¶r `IO.GetString()` och `IO.GetDouble()` validerar anvÃ¤ndarens input direkt och returnerar inte 
+   fÃ¶rrÃ¤n svaret Ã¤r godtagbart. 
+6. LÃ¤tt att skapa och kÃ¶ra menyer och undermenyer. 
 
-Det är också en del i min strävan att *alltid* arbeta enligt DRY principen (don’t repeat yourself). 
-Själva **IO** klassen är den delen av mitt program som består av mest kod, men det är för att jag har planer på att 
-fortsätta utveckla det här projektet (för egen vidareutveckling) efter att jag lämnat in det. 
-Det är också varför jag inte har plockat bort till exempel ```IO.GetDouble()``` som för tillfället är oanvänd. 
-Jag hade kunnat skrivit **IO** klassen som ett *class library* och länkat det till projektet, men då programmet är 
-litet kände jag inte ett behov för det. 
+Det Ã¤r ocksÃ¥ en del i min strÃ¤van att *alltid* arbeta enligt DRY principen (donâ€™t repeat yourself). 
+SjÃ¤lva `IO` klassen Ã¤r den delen av mitt program som bestÃ¥r av mest kod, men det Ã¤r fÃ¶r att jag har planer pÃ¥ att 
+fortsÃ¤tta utveckla det hÃ¤r projektet (fÃ¶r egen vidareutveckling) efter att jag lÃ¤mnat in det. 
+Det Ã¤r ocksÃ¥ varfÃ¶r jag inte har plockat bort till exempel `IO.GetDouble()` som fÃ¶r tillfÃ¤llet Ã¤r oanvÃ¤nd. 
+Jag hade kunnat skrivit `IO` klassen som ett *class library* och lÃ¤nkat det till projektet, men dÃ¥ programmet Ã¤r 
+litet kÃ¤nde jag inte ett behov fÃ¶r det. 
 
-Jag har valt att använda mig av ett mycket rakt och enkelt gränssnitt. Förutom välkomstmeddelandet är det för det mesta 
-bara text rakt av (om än färgglatt), ingen direkt grafik. Det skulle kunna göras mer estetiskt tilltalande, men jag anser 
-att det lätt blir för plottrigt. Mitt program ska vara enkelt att förstå och använda. 
-Jag skriver alltid ut vilka knappar som förväntas användas för navigering i programmet. 
+Jag har valt att anvÃ¤nda mig av ett mycket rakt och enkelt grÃ¤nssnitt. FÃ¶rutom vÃ¤lkomstmeddelandet Ã¤r det fÃ¶r det mesta 
+bara text rakt av (om Ã¤n fÃ¤rgglatt), ingen direkt grafik. Det skulle kunna gÃ¶ras mer estetiskt tilltalande, men jag anser 
+att det lÃ¤tt blir fÃ¶r plottrigt. Mitt program ska vara enkelt att fÃ¶rstÃ¥ och anvÃ¤nda. 
+Jag skriver alltid ut vilka knappar som fÃ¶rvÃ¤ntas anvÃ¤ndas fÃ¶r navigering i programmet. 
 
-Vad gäller *designmönster* så var detta ett nytt koncept för mig. Jag vet att det alltid finns flera olika sätt att lösa 
-ett problem på. Att det skulle finnas fastställda lösningar för återkommande problem är dock något jag antagit. 
-Då detta kom sent i kursen och jag började arbeta på kalkylatorn i ett tidigt skede, har jag inte följt något fastställt 
-designmönster. Det här är något jag kommer att titta djupare på. 
+Vad gÃ¤ller **designmÃ¶nster** sÃ¥ var detta ett nytt koncept fÃ¶r mig. Jag vet att det *alltid finns flera olika sÃ¤tt* att lÃ¶sa 
+ett problem pÃ¥. Att det skulle finnas *faststÃ¤llda lÃ¶sningar fÃ¶r Ã¥terkommande problem* Ã¤r dock nÃ¥got jag antagit. 
+DÃ¥ det hÃ¤r introducerades sent i kursen och jag bÃ¶rjade arbeta pÃ¥ kalkylatorn i ett tidigt skede, har jag inte fÃ¶ljt nÃ¥got 
+faststÃ¤llt designmÃ¶nster. Det hÃ¤r Ã¤r nÃ¥got jag kommer att titta djupare pÃ¥ fÃ¶r framtida projekt. 
 
-Jag har sedan tidigare börjat *XML-kommentera* så mycket som möjligt. Då jag har erfarenhet av stora, dåligt dokumenterade 
-projekt, vet jag hur viktigt det kan vara. Jag tycker att XML är otroligt hjälpsamt, då det automatiskt skapar tooltips i 
-visual studio (som visas när man håller muspekaren över den member som blivit kommenterad, eller när man passar in parametrar 
+Jag har sedan tidigare *XML-kommentera* sÃ¥ mycket som mÃ¶jligt. DÃ¥ jag har erfarenhet av stora, dÃ¥ligt dokumenterade 
+projekt, vet jag hur viktigt det kan vara. Jag tycker att XML Ã¤r otroligt hjÃ¤lpsamt, dÃ¥ det *automatiskt skapar tooltips* i 
+visual studio (som visas nÃ¤r man hÃ¥ller muspekaren Ã¶ver den member som blivit kommenterad, eller nÃ¤r man passar in parametrar 
 till en metod eller liknande). 
 
-Utöver detta har jag också försökt lägga kommentarer i själva koden. Speciellt på de ställen där det kanske inte är alldeles 
-uppenbart vad som utförs. 
+UtÃ¶ver detta har jag ocksÃ¥ fÃ¶rsÃ¶kt lÃ¤gga kommentarer i sjÃ¤lva koden. Speciellt pÃ¥ de stÃ¤llen dÃ¤r det kanske inte Ã¤r alldeles 
+uppenbart vad som utfÃ¶rs. 
 
-Slutligen vill jag nämna att anledningen till att alla klasser är statiska är för att jag inte har något behov av att 
-instantiera objekt av dem. Att **Calculator** ligger som en egen klass och inte direkt i *Program.cs*, är för att göra det 
-enklare att testköra olika delar av mitt program direkt via top-level statements i ```Main()```. 
+Slutligen vill jag nÃ¤mna att anledningen till att alla klasser Ã¤r statiska Ã¤r fÃ¶r att jag inte har nÃ¥got behov av att 
+instantiera objekt av dem. Att `Calculator` ligger som en egen klass och inte direkt i *Program.cs*, Ã¤r fÃ¶r att gÃ¶ra det 
+enklare att testkÃ¶ra olika delar av mitt program direkt via top-level statements i `Main()`. 
 
-### FÖRBÄTTRINGSPUNKTER
-Jag anser att kod ofta mår bra av att ses över en andra, eller tredje gång under projektets livstid, för att se om det går 
-att förenkla den (*refactor*). När jag varit ifrån koden ett tag så inser jag ofta att den är alldeles för rörig, för att 
-enkelt kunna överblicka vad den gör. Ett tydligt exempel jag har, är en sats jag hade i ```ExpressionParser.ParseExpression()``` 
+### FÃ–RBÃ„TTRINGSPUNKTER
+Jag anser att kod ofta mÃ¥r bra av att ses Ã¶ver en andra, eller tredje gÃ¥ng under projektets livstid, fÃ¶r att se om det gÃ¥r 
+att fÃ¶renkla den (*refactor*). NÃ¤r jag varit ifrÃ¥n koden ett tag sÃ¥ inser jag ofta att den Ã¤r alldeles fÃ¶r rÃ¶rig, fÃ¶r att 
+enkelt kunna Ã¶verblicka vad den gÃ¶r. Ett tydligt exempel jag har, Ã¤r en sats jag hade i `ExpressionParser.ParseExpression()`
 metoden: 
 
-```if ((level == 3 && token == "^") || (level == 2 && (token == "*" || token == "/" || token == "%")) || (level == 1 && (token == "+" || token == "-"))) { /* code here */}``` 
+`if ((level == 3 && token == "^") || (level == 2 && (token == "*" || token == "/" || token == "%")) || (level == 1 && (token == "+" || token == "-"))) { /* code here */}` 
 
-Allt samlat på en och samma rad, med flera parenteser och **&&** och **||** villkor. Denna sats är numer ersatt med en egen metod: 
+Allt samlat pÃ¥ en och samma rad, med flera parenteser och **&&** och **||** villkor. Denna sats Ã¤r numer ersatt med en egen metod: 
 
-```private static bool IsNextOperator(char? mathOperator, int level) => ((level, mathOperator)) switch
-        {
-            (3, ExponentiationOperator) or
-            (2, MultiplicationOperator) or
-            (2, DivisionOperator) or
-            (2, ModulusOperator) or
-            (1, AdditionOperator) or
-            (1, SubtractionOperator) => true,
-            _ => false,
-        };```
+`private static bool IsNextOperator(char? mathOperator, int level) => ((level, mathOperator)) switch  
+    {  
+        3, ExponentiationOperator) or  
+        (2, MultiplicationOperator) or  
+        (2, DivisionOperator) or  
+        (2, ModulusOperator) or  
+        (1, AdditionOperator) or  
+        (1, SubtractionOperator) => true,  
+        _ => false,  
+    };`
 
-Fler rader kod, men för mig betydligt enklare att läsa av. Dessutom är operatörerna jag tittar efter ersatta av konstanter, 
-vilket gör det lättare ifall jag i framtiden vill byta ut en symbol för en operatör.
+(*GitHubs code block ignorerar tydligen white space sÃ¥ satsen ovan ser ut att vara pÃ¥ samma rad...*)
 
-Ifall det här projektet skulle växa skulle det vara bra att göra fler konstanter av värden som kan tänkas upprepas ofta: 
+Fler rader kod, men fÃ¶r mig betydligt enklare att lÃ¤sa av. Dessutom Ã¤r operatÃ¶rerna jag tittar efter ersatta av konstanter, 
+vilket gÃ¶r det lÃ¤ttare ifall jag i framtiden vill byta ut en symbol fÃ¶r en operatÃ¶r.
 
-```IO.Wait("Tryck på valfri knapp för att fortsätta...");```
+Ifall det hÃ¤r projektet skulle vÃ¤xa skulle det vara bra att gÃ¶ra fler konstanter av vÃ¤rden som kan tÃ¤nkas upprepas ofta: 
 
-Här skulle textsträngen i argumentet med fördel kunna göras om till ```const DefaultWaitMessage = "Tryck på valfri knapp för att fortsätta...";```.
+`IO.Wait("Tryck pÃ¥ valfri knapp fÃ¶r att fortsÃ¤tta...");`
 
-Jag skulle också vilja flytta all validering av ett uttryck till en egen metod. I nuläget kontrollerar ```ExpressionParser.TokenizeInput()``` 
-metoden efter alla uttrycksfel utom ```DivideByZeroException```, vilket istället testas för i ```ExpressionParser.ParseExpression()``` metoden. 
-Dessutom skickar jag en generell exception (```new Exception(”Error message here”)```) med ett meddelande vid vissa fel. 
-Här borde jag istället hitta en mer lämplig exception, eller skapa egna klasser som ärver från ```Exception```: 
-```class OperatorException : Exception```. 
+HÃ¤r skulle textstrÃ¤ngen i argumentet med fÃ¶rdel kunna gÃ¶ras om till `const DefaultWaitMessage`.
 
-Jag skulle också vilja inkludera mer data vid en valideringserror, till exempel tokens index i input-strängen. Detta så jag 
-kan flytta markören i konsollen dit felet påträffats, istället för att användaren måste skriva om hela uttrycket, utan att 
+Jag skulle ocksÃ¥ vilja flytta all validering av ett uttryck till en egen metod. I nulÃ¤get kontrollerar `ExpressionParser.TokenizeInput()` 
+metoden efter alla uttrycksfel utom `DivideByZeroException`, vilket istÃ¤llet testas fÃ¶r i `ExpressionParser.ParseExpression()` metoden. 
+
+Dessutom skickar jag en generell exception (`new Exception(â€Error message hereâ€)`) med ett meddelande vid vissa fel. 
+HÃ¤r borde jag istÃ¤llet hitta en mer lÃ¤mplig exception, eller skapa egna klasser som Ã¤rver frÃ¥n `Exception`: 
+`class OperatorException : Exception`. 
+
+Jag skulle ocksÃ¥ vilja *inkludera mer data* vid en valideringserror, till exempel tokens index i input-strÃ¤ngen. Detta sÃ¥ jag 
+kan flytta markÃ¶ren i konsollen dit felet pÃ¥trÃ¤ffats, istÃ¤llet fÃ¶r att anvÃ¤ndaren mÃ¥ste skriva om hela uttrycket, utan att 
 kanske veta vart det blev fel. 
 
-Jag valde också att kasta bort allt oväsentligt vid konverteringen av en input-sträng till tokens. 
-Detta kanske borde trigga en varning, då resultatet kanske inte var det som användaren syftade till (*1 x 24 kommer tolkas som 124*).
+Jag valde ocksÃ¥ att *kasta bort allt ovÃ¤sentligt* vid konverteringen av en input-strÃ¤ng till tokens. 
+Detta kanske borde trigga en varning, dÃ¥ resultatet kanske inte var det som anvÃ¤ndaren syftade till (***1 x 24** kommer tolkas som **124***).
 
-Eftersom det här är ett simpelt console-projekt så har inte *performance* varit något jag behövt tänka så mycket på. 
-Tidigare, till exempel i mitt bildredigeringsprogram, har det varit av yttersta vikt att metoderna varit så snabba och 
-effektiva som möjligt. Men här spelar det ingen större roll om jag optimerat min parser tillräckligt.
+Eftersom det hÃ¤r Ã¤r ett simpelt console-projekt sÃ¥ har inte *performance* varit nÃ¥got jag behÃ¶vt tÃ¤nka sÃ¥ mycket pÃ¥. 
+Tidigare, till exempel i mitt bildredigeringsprogram, har det varit av yttersta vikt att metoderna varit sÃ¥ snabba och 
+effektiva som mÃ¶jligt. Men hÃ¤r spelar det ingen stÃ¶rre roll ifall jag optimerat min parser tillrÃ¤ckligt.
 
 ### VIDAREUTVECKLING
 
-Jag har många idéer för vidareutveckling av det här projektet. Vissa arbetar jag redan på.
+Jag har *mÃ¥nga idÃ©er fÃ¶r vidareutveckling* av det hÃ¤r projektet. Vissa arbetar jag redan pÃ¥.
 
-Några exempel på vad jag vill göra:
-- Tillåta att användaren skapar egna variabler (*x = 1 + 2 / 3*) som sedan kan användas i nästa beräkning (*2 ^ 5 * x*).
-- Lösa enkla ekvationer..
-- Lägga till matematiska funktioner som sin, cos, random, round m.fl.
-- Visa steg för steg hur man räknar ut uttrycket (redan utvecklat, inte integrerat).
-- Partial evaluation of expression (räkna ut en del av uttrycket för att simplifiera det. (redan utvecklat, inte integrerat).
-- Tillåta ändring av uträkningsordning, genom användning av parenteser: *2 ^ (4 - 5)*.
-- Meny med inställningar där man bl.a. kan ändra standardfärger, stänga av navigeringshjälp m.m.
-- Låta användaren redigera ett uttryck från historiken.
-- Låta användaren skapa ett nytt uttryck baserat på resultatet av ett tidigare uttryck från historiken.
-- Låta användaren definiera egna matematiska funktioner som sedan kan anropas.
-- Lägga in matematiska konstanter som Pi, e.
-- Eventuellt lägga till möjligheten att välja decimal som datatyp, istället för double, vid önskan av mer precision.
-
+NÃ¥gra exempel pÃ¥ vad jag vill gÃ¶ra:
+- TillÃ¥ta att anvÃ¤ndaren skapar egna variabler (***X** = 1 + 2 / 3*) som sedan kan anvÃ¤ndas i nÃ¤sta berÃ¤kning (*2 ^ 5 \* **X***).
+- LÃ¶sa enkla ekvationer..
+- LÃ¤gga till matematiska funktioner som *sin*, *cos*, *random*, *round* m.fl.
+- Visa steg fÃ¶r steg hur man rÃ¤knar ut uttrycket *(redan utvecklat, inte integrerat)*.
+- Partial evaluation of expression (rÃ¤kna ut en del av uttrycket fÃ¶r att simplifiera det. *(redan utvecklat, inte integrerat)*).
+- TillÃ¥ta Ã¤ndring av utrÃ¤kningsordning, genom anvÃ¤ndning av parenteser: *2 ^ (4 - 5)*.
+- Meny med instÃ¤llningar dÃ¤r man bl.a. kan Ã¤ndra standardfÃ¤rger, stÃ¤nga av navigeringshjÃ¤lp m.m.
+- LÃ¥ta anvÃ¤ndaren redigera ett uttryck frÃ¥n historiken.
+- LÃ¥ta anvÃ¤ndaren skapa ett nytt uttryck baserat pÃ¥ resultatet av ett tidigare uttryck frÃ¥n historiken.
+- LÃ¥ta anvÃ¤ndaren definiera egna matematiska funktioner som sedan kan anropas.
+- LÃ¤gga in matematiska konstanter som *Pi*, *e*.
+- Eventuellt lÃ¤gga till mÃ¶jligheten att vÃ¤lja `Decimal` som datatyp, istÃ¤llet fÃ¶r `Double`, vid Ã¶nskan av mer precision.
