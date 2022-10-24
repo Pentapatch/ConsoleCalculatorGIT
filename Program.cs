@@ -10,6 +10,7 @@
 // [X] Fråga användaren om den vill visa tidigare resultat.
 // [X] Visa tidigare resultat
 // [?] Fråga användaren om den vill avsluta eller fortsätta.
+//     - Ersatt med context meny med fler alternativ
 
 // ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤
 // ¤¤ SEE THE 'README.md' FOR MY REFLECTIONS ON THIS ASSIGNMENT ¤¤
