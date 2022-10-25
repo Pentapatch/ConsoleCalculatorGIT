@@ -1,6 +1,6 @@
 ﻿namespace ConsoleCalculatorGIT
 {
-    /// <summary>This is the main program. Call this method to run the calculator.</summary>
+    /// <summary>Contains the overall navigational logic for the calculator program.</summary>
     internal static class Calculator
     {
         // ###########################################
