@@ -45,19 +45,19 @@ Jag valde snabbt att bryta ner mitt program till olika delar och låta egna klas
 Att ha separerat ansvarsområden till klasser gör det lättare att hitta det man söker, och lättare att expandera och 
 redigera programmet. Dessa klasser har både publika och privata metoder. 
 
-Anledningen till att jag skapade en egen input/output-klass (**IO**) i stället för att använda `Console.WriteLine()` 
+Anledningen till att jag skapade en egen input/output-klass (`IO`) i stället för att använda `Console.WriteLine()` 
 eller `Console.ReadLine()` är egentligen flerfaldig: 
 1. Minskar riskerna med att `Console.ForegroundColor` och `Console.BackgroundColor` är *global state* properties. 
-2. Gör det lättare att använda färger (endast en rad kod behövs för att skriva i en ny färg). 
-3. Det låter mig ”highlight:a” ord eller meningar i en annan färg. 
-4. Lättare att konfigurera om ett standard-färgtema om jag vill (genom konstanter som ```const DefaultForegroundColor```). 
+2. Gör det lättare att använda färger (endast en rad kod behövs för att skriva i en ny färg, återställs efteråt). 
+3. Det låter mig ”highlight:a” {ord} eller {meningar i en annan färg}. 
+4. Lättare att konfigurera om ett standard-färgtema om jag vill (genom konstanter som `const DefaultForegroundColor`). 
 5. Egna metoder för `IO.GetString()` och `IO.GetDouble()` validerar användarens input direkt och returnerar inte 
    förrän svaret är godtagbart. 
 6. Lätt att skapa och köra menyer och undermenyer. 
 
 Det är också en del i min strävan att *alltid* arbeta enligt **DRY principen** (don’t repeat yourself). 
 Själva `IO` klassen är den delen av mitt program som består av mest kod, men det är för att jag har planer på att 
-fortsätta utveckla det här projektet (för egen vidareutveckling) efter att jag lämnat in det. 
+fortsätta utveckla det här projektet (*för egen vidareutveckling*) efter att jag lämnat in det. 
 Det är också varför jag inte har plockat bort till exempel `IO.GetDouble()` som för tillfället är oanvänd. 
 Jag hade kunnat skrivit `IO` klassen som ett *class library* och länkat det till projektet, men då programmet är 
 litet kände jag inte ett behov för det. 
