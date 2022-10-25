@@ -22,7 +22,7 @@
         /// <summary>Takes in a math expression in the form of a string and transform it into a list of tokens to be further processed
         ///          using the <see cref="ParseExpression(List{string})"/> method. It also validates the expressions and throws exceptions
         ///          if anything is out of order (does not check against division by zero).</summary>
-        /// <param name="input"></param>
+        /// <param name="input">The user entered math expression.</param>
         /// <exception cref="Exception"></exception>
         public static List<string> TokenizeInput(string input)
         {
