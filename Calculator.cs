@@ -27,31 +27,13 @@
         public static void Run()
         {
             Console.Title = DefaultTitle;
-            DisplayWelcomeMessage();
+            ViewWelcomeMessage();
             MainMenu();
         }
 
         // #####################
         // ## Private methods ##
         // #####################
-
-        /// <summary>Write a welcoming message to the console.</summary>
-        private static void DisplayWelcomeMessage()
-        {
-            IO.Clear();
-            IO.Write(@" {_____}   {___}   _____       _            _       _             ");
-            IO.Write(@"{/  ___|} {/ _ \} /  __ \     | |          | |     | |            ");
-            IO.Write(@"{\ `--.} {/ /_\ \}| /  \/ __ _| | ___ _   _| | __ _| |_ ___  _ __ ");
-            IO.Write(@" {`--. \}{|  _  |}| |    / _` | |/ __| | | | |/ _` | __/ _ \| '__|");
-            IO.Write(@"{/\__/ /}{| | | |}| \__/\ (_| | | (__| |_| | | (_| | || (_) | |   ");
-            IO.Write(@"{\____}(_){_| |_}(_)____/\__,_|_|\___|\__,_|_|\__,_|\__\___/|_|   ");
-            IO.Write("");
-            IO.Write("Välkommen till Dennis Hankvist's semi-avancerade konsollkalkylator!");
-            IO.Write("");
-            IO.Write("En betygsgrundande inlämningsuppgift inom Programmering Grund.");
-            IO.Write("TUC Yrkeshögskola, Systemutvecklare.NET, HT2022");
-            IO.Wait("Tryck på valfri knapp för att fortsätta...");
-        }
 
         /// <summary>Display the main menu.
         ///          Will never return from this method. The user can choose to exit the application.</summary>
@@ -83,13 +65,31 @@
                         ViewHelp();
                         break;
                     case 3: // Avsluta programmet
-                        if(IO.Confirm("Är du säker på att du vill avsluta?")) 
+                        if (IO.Confirm("Är du säker på att du vill avsluta?"))
                             Environment.Exit(0);
                         break;
                 }
 
                 ExitToMain = false; // Reset flag
             }
+        }
+
+        /// <summary>Write a welcoming message to the console.</summary>
+        private static void ViewWelcomeMessage()
+        {
+            IO.Clear();
+            IO.Write(@" {_____}   {___}   _____       _            _       _             ");
+            IO.Write(@"{/  ___|} {/ _ \} /  __ \     | |          | |     | |            ");
+            IO.Write(@"{\ `--.} {/ /_\ \}| /  \/ __ _| | ___ _   _| | __ _| |_ ___  _ __ ");
+            IO.Write(@" {`--. \}{|  _  |}| |    / _` | |/ __| | | | |/ _` | __/ _ \| '__|");
+            IO.Write(@"{/\__/ /}{| | | |}| \__/\ (_| | | (__| |_| | | (_| | || (_) | |   ");
+            IO.Write(@"{\____}(_){_| |_}(_)____/\__,_|_|\___|\__,_|_|\__,_|\__\___/|_|   ");
+            IO.Write("");
+            IO.Write("Välkommen till Dennis Hankvist's semi-avancerade konsollkalkylator!");
+            IO.Write("");
+            IO.Write("En betygsgrundande inlämningsuppgift inom Programmering Grund.");
+            IO.Write("TUC Yrkeshögskola, Systemutvecklare.NET, HT2022");
+            IO.Wait("Tryck på valfri knapp för att fortsätta...");
         }
 
         /// <summary>Print a help section to the console.</summary>
