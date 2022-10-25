@@ -46,7 +46,7 @@ Att ha separerat ansvarsområden till klasser gör det lättare att hitta det ma
 redigera programmet. Dessa klasser har både publika och privata metoder. 
 
 Anledningen till att jag skapade en egen input/output-klass (`IO`) i stället för att använda `Console.WriteLine()` 
-eller `Console.ReadLine()` är egentligen flerfaldig: 
+och `Console.ReadLine()` överallt är egentligen flerfaldig: 
 1. Minskar riskerna med att `Console.ForegroundColor` och `Console.BackgroundColor` är *global state* properties. 
 2. Gör det lättare att använda färger (endast en rad kod behövs för att skriva i en ny färg, återställs efteråt). 
 3. Det låter mig ”highlight:a” {ord} eller {meningar i en annan färg}. 
