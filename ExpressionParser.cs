@@ -99,7 +99,7 @@
 
         /// <summary>Take in a list of math tokens and evaluate them in order to preduce the sum of the expression.
         ///          Use the <see cref="TokenizeInput(string)"/> method in order to create the tokens.</summary>
-        /// <param name="tokens"></param>
+        /// <param name="tokens">The list of tokens to parse.</param>
         /// <returns>The sum of the math expression as a double.</returns>
         /// <exception cref="DivideByZeroException"></exception>
         public static double ParseExpression(List<string> tokens)
