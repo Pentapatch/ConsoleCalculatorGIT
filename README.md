@@ -146,7 +146,7 @@ Det här skulle ge mig fler möjligheter för interaktion med historiken (t.ex. 
 infoga uttrycket i nytt uttryck).
 
 En annan fördel med detta är att jag skulle kunna göra *parse*, *tokenize* och *format* metoderna i `ExpressionParser` till 
-**private**, och istället lägga till en ny **public** metod `Compute(string expression)` som returnerar ett `HistoryEntry` objekt.
+**private**, och istället lägga till en enda ny **public** metod `Compute(string expression)` som returnerar ett `HistoryEntry` objekt.
 
 Några fler exempel på vad jag vill göra:
 
