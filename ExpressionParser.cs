@@ -159,6 +159,8 @@
                         throw new DivideByZeroException();
 
                     // Perform the calculation
+                    // Note: If I were using a system where the tokens consisted of their own inherited classes
+                    //       I would have solved this part by using polymorpishm (Token.Compute())
                     if (currentOperator == ExponentiationOperator)
                         sum = Math.Pow(leftTerm, rightTerm);
                     if (currentOperator == ModulusOperator)
