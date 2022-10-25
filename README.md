@@ -105,7 +105,7 @@ Allt samlat på en och samma rad, med flera parenteser och **&&** och **||** vil
         _ => false,  
     };`
 
-(*GitHubs code block ignorerar tydligen white space så satsen ovan ser ut att vara på samma rad...*)
+(*GitHubs code block ignorerar tydligen whitespace så satsen ovan ser ut att vara på samma rad...*)
 
 Fler rader kod, men för mig betydligt enklare att läsa av. Dessutom är operatörerna jag tittar efter ersatta av konstanter, 
 vilket gör det lättare ifall jag i framtiden vill byta ut en symbol för en operatör.
@@ -139,7 +139,7 @@ effektiva som möjligt. Men här spelar det ingen större roll ifall jag optimer
 Jag har *många idéer för vidareutveckling* av det här projektet. Vissa arbetar jag redan på.
 
 Istället för att lagra *uttrycket = resultatet* som en textsträng i historiklistan, skulle jag kunna tänka mig att skapa och 
-lagra instanser av en `HistoryEntry´ klass med egenskaper som `Expression`, `Result`, `Tokens` och metoder som `ToString()`. 
+lagra instanser av en `HistoryEntry` klass med egenskaper som `Expression`, `Result`, `Tokens` och metoder som `ToString()`. 
 Det här skulle ge mig fler möjligheter för interaktion med historiken (t.ex. skapa en variabel från ett resultat eller 
 infoga uttrycket i nytt uttryck).
 
