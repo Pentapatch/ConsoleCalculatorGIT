@@ -27,9 +27,9 @@ ordentlig parser hade använt. Vid sidan av detta projekt har jag dock arbetat p
 ### Arbetssätt
 Att använda GIT var för mig helt nytt och det har varit roligt och bra att lära mig ett nytt källkodshanteringssystem. 
 Då jag i början inte var så van vid GIT, arbetade jag i olika projekt för att experimentera lite med koden. 
-Halvvägs in på kursen skapade jag en ny repository på GitHub och har sedan dess arbetat med branches för att utveckla 
-och redigera projektet. Ibland har jag dock gjort mindre ändringar direkt i master-branchen, då det är ett par extra steg 
-för att merge:a ändringar (antar att det är en *bad practice*?). 
+Någonstans halvvägs in på kursen skapade jag en ny repository på GitHub och har sedan dess arbetat med branches för att 
+utveckla och redigera projektet. Ibland har jag dock gjort mindre ändringar direkt i master-branchen, då det är ett par extra 
+steg för att merge:a ändringar (antar att det är en *bad practice*?). 
 
 Önskar att jag hade den här kunskapen om GIT till mina tidigare, större hobbyprojekt, som till exempel min bildredigerare 
 som består av flertalet filer och tusentals rader kod. 
