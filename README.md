@@ -34,6 +34,8 @@ för att merge:a ändringar (antar att det är en *bad practice*?).
 Önskar att jag hade den här kunskapen om GIT till mina tidigare, större hobbyprojekt, som till exempel min bildredigerare 
 som består av flertalet filer och tusentals rader kod. 
 
+Jag har följt *"naming conventions"* och använt UpperCamelCase och lowerCamelCase som det förväntas.
+
 Jag valde snabbt att bryta ner mitt program till olika delar och låta egna klasser ha sina egna ansvarsområden: 
 - `Calculator` klassen ansvarar för körning av själva programlogiken (navigering i menysystem, nya beräkningar, visa 
   hjälpavsnitt osv). 
