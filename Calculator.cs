@@ -160,7 +160,7 @@
                 // Check if we should abort (user left an empty answer)
                 if (expression == "") return;
 
-                // Try to parse the expresion
+                // Try to parse the expression
                 try
                 {
                     // Tokenize the input
