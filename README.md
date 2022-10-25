@@ -55,7 +55,7 @@ eller `Console.ReadLine()` är egentligen flerfaldig:
    förrän svaret är godtagbart. 
 6. Lätt att skapa och köra menyer och undermenyer. 
 
-Det är också en del i min strävan att *alltid* arbeta enligt DRY principen (don’t repeat yourself). 
+Det är också en del i min strävan att *alltid* arbeta enligt **DRY principen** (don’t repeat yourself). 
 Själva `IO` klassen är den delen av mitt program som består av mest kod, men det är för att jag har planer på att 
 fortsätta utveckla det här projektet (för egen vidareutveckling) efter att jag lämnat in det. 
 Det är också varför jag inte har plockat bort till exempel `IO.GetDouble()` som för tillfället är oanvänd. 
