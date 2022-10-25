@@ -28,7 +28,7 @@
         {
             // This method scans the user input, character by character, extracting only the
             // bits that are relevant, into tokens for further processing.
-            // White spaces and characters are ignored. Input validation is performed.
+            // Whitespace, characters and illegal symbols are ignored. Input validation is performed.
 
             //TODO: Add custom exceptions or separate the validation part to its own method
 
