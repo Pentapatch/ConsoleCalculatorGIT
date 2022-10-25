@@ -48,7 +48,7 @@
                     bool isNegativeNumber = false; // Flag that dictates whether this character should be added to
                                                    // the current token instead of being treated as a separate token
                     
-                    // Make sure that a left hand value is provided
+                    // Make sure that a left hand term is provided
                     if (tokens[^1] == "")
                     {
                         // Check if the operator is an subtraction (could represent a negative number)
@@ -56,11 +56,11 @@
                             // Is a negative number: Do not add as an operator
                             isNegativeNumber = true;
                         else
-                            // Is not a negative number: raise exception
+                            // Is not a negative number: throw exception
                             throw new Exception("En operator saknar en term på vänster sida.");
                     }
 
-                    // Add the operator as a new token, then add a new empty token
+                    // (if not a negative number) Add the operator as a new token, then add a new empty token
                     if (!isNegativeNumber)
                     {
                         tokens.Add(currentChar.ToString());
