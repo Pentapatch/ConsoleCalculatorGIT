@@ -27,12 +27,14 @@ ordentlig parser hade använt. Vid sidan av detta projekt har jag dock arbetat p
 ### Arbetssätt
 Att använda GIT var för mig helt nytt och det har varit roligt och bra att lära mig ett nytt källkodshanteringssystem. 
 Då jag i början inte var så van vid GIT, arbetade jag i olika projekt för att experimentera lite med koden. 
-Halvvägs in på kursen skapade jag en ny repository på GitHub och har sedan dess arbetat med branches för att utveckla 
-och redigera projektet. Ibland har jag dock gjort mindre ändringar direkt i master-branchen, då det är ett par extra steg 
-för att merge:a ändringar (antar att det är en *bad practice*?). 
+Någonstans halvvägs in på kursen skapade jag en ny repository på GitHub och har sedan dess arbetat med branches för att 
+utveckla och redigera projektet. Ibland har jag dock gjort mindre ändringar direkt i master-branchen, då det är ett par extra 
+steg för att merge:a ändringar (antar att det är en *bad practice*?). 
 
 Önskar att jag hade den här kunskapen om GIT till mina tidigare, större hobbyprojekt, som till exempel min bildredigerare 
 som består av flertalet filer och tusentals rader kod. 
+
+Jag har följt *"naming conventions"* och använt UpperCamelCase och lowerCamelCase som det förväntas.
 
 Jag valde snabbt att bryta ner mitt program till olika delar och låta egna klasser ha sina egna ansvarsområden: 
 - `Calculator` klassen ansvarar för körning av själva programlogiken (navigering i menysystem, nya beräkningar, visa 
@@ -46,7 +48,7 @@ Att ha separerat ansvarsområden till klasser gör det lättare att hitta det ma
 redigera programmet. Dessa klasser har både publika och privata metoder. 
 
 Anledningen till att jag skapade en egen input/output-klass (`IO`) i stället för att använda `Console.WriteLine()` 
-eller `Console.ReadLine()` är egentligen flerfaldig: 
+och `Console.ReadLine()` överallt är egentligen flerfaldig: 
 1. Minskar riskerna med att `Console.ForegroundColor` och `Console.BackgroundColor` är *global state* properties. 
 2. Gör det lättare att använda färger (endast en rad kod behövs för att skriva i en ny färg, återställs efteråt). 
 3. Det låter mig ”highlight:a” {ord} eller {meningar i en annan färg}. 
@@ -144,7 +146,7 @@ Det här skulle ge mig fler möjligheter för interaktion med historiken (t.ex. 
 infoga uttrycket i nytt uttryck).
 
 En annan fördel med detta är att jag skulle kunna göra *parse*, *tokenize* och *format* metoderna i `ExpressionParser` till 
-**private**, och istället lägga till en ny **public** metod `Compute(string expression)` som returnerar ett `HistoryEntry` objekt.
+**private**, och istället lägga till en enda ny **public** metod `Compute(string expression)` som returnerar ett `HistoryEntry` objekt.
 
 Några fler exempel på vad jag vill göra:
 
