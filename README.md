@@ -96,7 +96,7 @@ Allt samlat på en och samma rad, med flera parenteser och **&&** och **||** vil
 
 `private static bool IsNextOperator(char? mathOperator, int level) => ((level, mathOperator)) switch  
     {  
-        3, ExponentiationOperator) or  
+        (3, ExponentiationOperator) or  
         (2, MultiplicationOperator) or  
         (2, DivisionOperator) or  
         (2, ModulusOperator) or  
@@ -121,14 +121,14 @@ metoden efter alla uttrycksfel utom `DivideByZeroException`, vilket istället te
 
 Dessutom skickar jag en generell exception (`new Exception(”Error message here”)`) med ett meddelande vid vissa fel. 
 Här borde jag istället hitta en mer lämplig exception, eller skapa egna klasser som ärver från `Exception`: 
-`class OperatorException : Exception`. 
+`class TokenizerException : Exception`. 
 
-Jag skulle också vilja *inkludera mer data* vid en valideringserror, till exempel tokens index i input-strängen. Detta så jag 
+Jag skulle också vilja *inkludera mer data* vid en valideringserror, till exempel tokens *index* i input-strängen. Detta så jag 
 kan flytta markören i konsollen dit felet påträffats, istället för att användaren måste skriva om hela uttrycket, utan att 
 kanske veta vart det blev fel. 
 
-Jag valde också att *kasta bort allt oväsentligt* vid konverteringen av en input-sträng till tokens. 
-Detta kanske borde trigga en varning, då resultatet kanske inte var det som användaren syftade till (***1 x 24** kommer tolkas som **124***).
+Jag valde att *kasta bort allt oväsentligt* vid konverteringen av input-sträng till tokens. 
+Detta kanske borde trigga en varning, då resultatet kanske inte var det som användaren syftade till (i.e. ***1 x 24** kommer tolkas som **124***).
 
 Eftersom det här är ett simpelt console-projekt så har inte *performance* varit något jag behövt tänka så mycket på. 
 Tidigare, till exempel i mitt bildredigeringsprogram, har det varit av yttersta vikt att metoderna varit så snabba och 
@@ -138,7 +138,16 @@ effektiva som möjligt. Men här spelar det ingen större roll ifall jag optimer
 
 Jag har *många idéer för vidareutveckling* av det här projektet. Vissa arbetar jag redan på.
 
-Några exempel på vad jag vill göra:
+Istället för att lagra *uttrycket = resultatet* som en textsträng i historiklistan, skulle jag kunna tänka mig att skapa och 
+lagra instanser av en `HistoryEntry´ klass med egenskaper som `Expression`, `Result`, `Tokens` och metoder som `ToString()`. 
+Det här skulle ge mig fler möjligheter för interaktion med historiken (t.ex. skapa en variabel från ett resultat eller 
+infoga uttrycket i nytt uttryck).
+
+En annan fördel med detta är att jag skulle kunna göra *parse*, *tokenize* och *format* metoderna i `ExpressionParser` till 
+**private**, och istället lägga till en ny **public** metod `Compute(string expression)` som returnerar ett `HistoryEntry` objekt.
+
+Några fler exempel på vad jag vill göra:
+
 - Tillåta att användaren skapar egna variabler (***X** = 1 + 2 / 3*) som sedan kan användas i nästa beräkning (*2 ^ 5 \* **X***).
 - Lösa enkla ekvationer..
 - Lägga till matematiska funktioner som *sin*, *cos*, *random*, *round* m.fl.

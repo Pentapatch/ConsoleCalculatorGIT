@@ -1,5 +1,6 @@
 ﻿namespace ConsoleCalculatorGIT
 {
+    /// <summary>Contains methods for tokenizing, parsing and computing a user entered math expression.</summary>
     internal static class ExpressionParser
     {
         // ###################
@@ -85,7 +86,12 @@
 
             // Make sure that the last token is set (otherwise it is a faulty input)
             if (tokens[^1] == "")
-                throw new Exception("En operator saknar en term på höger sida.");
+            {
+                if (tokens.Count == 1)
+                    throw new Exception("Uttrycket behöver minst en term.");
+                else
+                    throw new Exception("En operator saknar en term på höger sida.");
+            }
 
             // Return the list of tokens
             return tokens;
@@ -153,7 +159,6 @@
                         throw new DivideByZeroException();
 
                     // Perform the calculation
-                    // Note: This part could probably be accomplished by using some design pattern
                     if (currentOperator == ExponentiationOperator)
                         sum = Math.Pow(leftTerm, rightTerm);
                     if (currentOperator == ModulusOperator)
@@ -183,12 +188,8 @@
             return Convert.ToDouble(localTokens[0]);
         }
 
-        // #####################
-        // ## Private methods ##
-        // #####################
-
-        /// <summary>Formats the list of tokens into a string.</summary>
-        /// <param name="tokens">The list of tokens to format.</param>
+        /// <summary>Formats the list of tokens into a user readable expression string.</summary>
+        /// <param name="tokens">The list of tokens to build the formatted expression from.</param>
         /// <returns>A formatted string that represents the expression.</returns>
         public static string FormatExpression(List<string> tokens)
         {
@@ -209,6 +210,10 @@
             return result;
         }
 
+        // #####################
+        // ## Private methods ##
+        // #####################
+
         /// <summary>Check if the current operator matches with the current level (of order of operation).</summary>
         /// <param name="mathOperator">The current operator token represented as a char.</param>
         /// <param name="level">The current level (of order of operation).</param>
@@ -224,9 +229,9 @@
             _ => false,
         };
 
-        /// <summary>Check whether the specified token is an operator token.</summary>
-        /// <param name="token">The token to check against.</param>
-        /// <returns>A boolean that indicates if the specified token is a math operator.</returns>
+        /// <summary>Check whether the specified token is a math operator token.</summary>
+        /// <param name="token">The token to check.</param>
+        /// <returns>A boolean that indicates if the specified token is a math operator token.</returns>
         private static bool IsOperator(string token) => GetOperator(token) switch
         {
             AdditionOperator or
@@ -240,7 +245,7 @@
 
         /// <summary>Convert the string token into nullable char.</summary>
         /// <param name="token">The token to convert.</param>
-        /// <returns>A representation of the math operator if succesfull, null otherwise.</returns>
+        /// <returns>A char representation of the math operator if succesfull, null otherwise.</returns>
         private static char? GetOperator(string token)
         {
             if (token.Length > 1) return null;

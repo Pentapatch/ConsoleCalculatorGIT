@@ -7,6 +7,7 @@
         // ## Private fields, properties and consts ##
         // ###########################################
 
+        /// <summary>A list of string that contains the history of the calculations.</summary>
         private static readonly List<string> history = new();
 
         /// <summary>Set this flag to true when the help section has automatically be shown once.</summary>
@@ -56,8 +57,9 @@
         ///          Will never return from this method. The user can choose to exit the application.</summary>
         private static void MainMenu()
         {
-            // Stay inside a loop until the user exits the application via the menu
             int index = 0; // <-- Store the index of the currently selected option outside of the loop
+
+            // Stay inside a loop until the user exits the application via the menu
             while (true)
             {
                 Console.Title = DefaultTitle;
@@ -75,13 +77,14 @@
                         NewCalculationPrompt();
                         break;
                     case 1: // Visa historik
-                        ViewHistory(true);
+                        ViewHistoryMenu(true);
                         break;
                     case 2: // Visa hjälp
                         ViewHelp();
                         break;
                     case 3: // Avsluta programmet
-                        if(IO.Confirm("Är du säker på att du vill avsluta?")) Environment.Exit(0);
+                        if(IO.Confirm("Är du säker på att du vill avsluta?")) 
+                            Environment.Exit(0);
                         break;
                 }
 
@@ -104,8 +107,8 @@
                      ConsoleColor.DarkGray, IO.DefaultBackgroundColor, ConsoleColor.Cyan);
 
             IO.Write("OPERATORER SOM STÖDS", IO.DefaultHighlightColor);
-            IO.Write("{+} för addition, {-} för subtraktion, {*} för multiplicering, {/} för dividering" +
-                     ", {%} för modulus samt för {^} exponent.\n",
+            IO.Write("({+}) för addition, ({-}) för subtraktion, ({*}) för multiplicering, ({/}) för dividering,\n" +
+                     "({%}) för modulus samt för ({^}) exponent.\n",
                      IO.DefaultForegroundColor, IO.DefaultBackgroundColor, ConsoleColor.Cyan);
 
             IO.Write("NEGATIVA TAL", IO.DefaultHighlightColor);
@@ -114,9 +117,9 @@
                      ConsoleColor.DarkGray, IO.DefaultBackgroundColor, ConsoleColor.Cyan);
 
             IO.Write("WHITESPACE", IO.DefaultHighlightColor);
-            IO.Write("Kalkylatorn ignorerar all white space, alla bokstäver och ogiltiga tecken.");
+            IO.Write("Kalkylatorn ignorerar all whitespace, alla bokstäver och ogiltiga tecken.");
             IO.Write("Exempel: \"{7--2*5}\" är tillåtet.\n" +
-                     "Exempel: \"{abc12 +5}\" kommer att tolkas som {12 + 5}.\n",
+                     "Exempel: \"{abc12 +5}\" kommer att tolkas som \"{12 + 5}\".\n",
                      ConsoleColor.DarkGray, IO.DefaultBackgroundColor, ConsoleColor.Cyan);
 
             IO.Write("AVBRYTA EN BERÄKNING", IO.DefaultHighlightColor);
@@ -139,27 +142,29 @@
             IO.Wait("Tryck på valfri knapp för att fortsätta...");
         }
 
+        /// <summary>Let the user enter a new expression to calculate.</summary>
         private static void NewCalculationPrompt()
         {
             // Display the help section if it has not been viewed already
             if (!helpShown) ViewHelp();
 
-            while (true)
+            // Stay in a loop until the users input is validated
+            while (!ExitToMain) // <-- Using a variable flag here in order to exit from nestled menus
             {
                 Console.Title = $"{DefaultTitle} - Ny beräkning";
 
                 // Let the end user enter their calculation
                 IO.Clear();
-                string test = IO.GetString("Skriv in ditt uttryck", true);
+                string expression = IO.GetString("Skriv in ditt uttryck", true);
 
                 // Check if we should abort (user left an empty answer)
-                if (test == "") return;
+                if (expression == "") return;
 
                 // Try to parse the expresion
                 try
                 {
                     // Tokenize the input
-                    List<string> tokens = ExpressionParser.TokenizeInput(test);
+                    List<string> tokens = ExpressionParser.TokenizeInput(expression);
 
                     // Parse the expression using the tokens
                     double result = ExpressionParser.ParseExpression(tokens);
@@ -171,8 +176,8 @@
                     // Store the result in the history list
                     history.Add(resultString);
 
-                    // Display a sub menu and let the user chose their next step
-                    CalculationContextMenu($"Resultat: {resultString}");
+                    // Display a sub menu and let the user choose their next step
+                    ResultContextMenu($"Resultat: {resultString}");
 
                     // Exit the method
                     return;
@@ -181,7 +186,7 @@
                 {
                     IO.Write("Ogiltig inmatning: Det går inte att dividera med noll.", ConsoleColor.Red);
                 }
-                catch (Exception e)
+                catch (Exception e) // <-- Needs to be below all other inherited exceptions, otherwise it will catch all
                 {
                     if (e.Message != "")
                         IO.Write($"Ogiltig inmatning: {e.Message}", ConsoleColor.Red);
@@ -194,16 +199,19 @@
             }
         }
 
-        private static void CalculationContextMenu(string result)
+        /// <summary>Show a context menu for a calculated result.</summary>
+        /// <param name="result">The result that was calculated.</param>
+        private static void ResultContextMenu(string result)
         {
             int index = 0;
+
+            // Stay in a loop until the user chooses to return or return to the main menu
             while (!ExitToMain)
             {
                 Console.Title = $"{DefaultTitle} - Beräkningsresultat";
 
                 // Display the context menu and store the selected index
                 index = IO.Menu(result, index, "Gör en ny beräkning",
-                                               "Visa beräkningssteg",
                                                "Visa historik",
                                                "Gå tillbaka till huvudmenyn");
 
@@ -213,14 +221,10 @@
                     case 0: // Gör en ny beräkning
                         NewCalculationPrompt();
                         return;
-                    case 1: // Visa beräkningssteg
-                        IO.Write("Den här funktionen är tyvärr inte implementerad ännu.", ConsoleColor.Red);
-                        IO.Wait("Tryck på valfri knapp för att fortsätta..");
+                    case 1: // Visa historik
+                        ViewHistoryMenu(false);
                         break;
-                    case 2: // Visa historik
-                        ViewHistory(false);
-                        break;
-                    case 3: // Gå tillbaka till huvudmenyn
+                    case 2: // Gå tillbaka till huvudmenyn
                         ExitToMain = true;
                         return;
                 }
@@ -231,7 +235,7 @@
         ///          go back or go back to the main menu.</summary>
         /// <param name="fromMainMenu">Set to true if this method is called from within the main menu (will
         ///                            disable the return to main menu option).</param>
-        private static void ViewHistory(bool fromMainMenu)
+        private static void ViewHistoryMenu(bool fromMainMenu)
         {
             // Set up the default option texts
             const string DefaultGoBack = "Gå tillbaka";
@@ -239,7 +243,9 @@
             const string DefaultClearHistory = "Rensa historiken";
 
             int index = history.Count == 0 ? 0 : 1; // <-- Select "Go back" by default
-            while (true)
+
+            // Stay in a loop until the user chooses to return
+            while (!ExitToMain)
             {
                 Console.Title = $"{DefaultTitle} - Historik";
 
@@ -269,7 +275,7 @@
                         if (IO.Confirm("Är du säker på att du vill rensa historiken"))
                         {
                             history.Clear();
-                            index = 0; // Reset the index, because the number of options might changes at the next iteration
+                            index = 0; // <-- Reset the index, because the number of options might changes at the next iteration
                         }
                         break;
                 }
