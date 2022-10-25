@@ -368,12 +368,12 @@ namespace ConsoleCalculatorGIT
 
         /// <summary>This method is using regular expressions in order to separate sequences of chars that
         ///          are encapsulated inside curly braces, in order to highlight them in another color.
-        ///          The method also checks for escape characters (i.e. {{word}} should be written as {word}
+        ///          Also checks for escape characters (i.e. {{word}} should be written as {word}
         ///          in the default color).</summary>
-        /// <param name="text"></param>
-        /// <param name="defaultColor"></param>
-        /// <param name="highlightColor"></param>
-        /// <returns></returns>
+        /// <param name="text">The input text to analyze and separate.</param>
+        /// <param name="defaultColor">The foreground color of the text that is not highlighted.</param>
+        /// <param name="highlightColor">The foreground color of the text that is highlighted.</param>
+        /// <returns>An array of a tuple that contains the text and the color of the sequence of the originial input text.</returns>
         private static (string Text, ConsoleColor Color)[] ExtractSequences(string text,
             ConsoleColor defaultColor, ConsoleColor highlightColor)
         {
@@ -381,7 +381,7 @@ namespace ConsoleCalculatorGIT
             // {[^}]*}+ checks for a sequence that begins with { and takes everything that comes next
             //          until a } is encountered
             // |        OR:
-            // [^{}]+   checks for a sequence that does not contain { or }
+            // [^{}]+   checks for a sequence that does not contain { and ends with }
 
             // Find the sequences that match with this pattern
             MatchCollection matches = regex.Matches(text);
